@@ -1,7 +1,7 @@
 # ecocycle
 
 <div style="text-align:center">
-  <img src="assets/images/logo.png" alt="Logo Ecocycle" width="250">
+  <img src="assets/images/logo.png" alt="Logo Ecocycle">
 </div>
 
 Ecocycle is an innovative application empowering users to make a direct impact on environmental sustainability. Leveraging Google technologies, this app provides an intuitive and enjoyable experience for scanning and managing everyday waste.
