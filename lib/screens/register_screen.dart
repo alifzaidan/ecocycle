@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class LoginScreen extends StatelessWidget {
                   height: 30,
                 ),
                 Text(
-                  'Welcome Back',
+                  'Create an Account',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.dmSans(
                     fontSize: 30,
@@ -40,6 +40,49 @@ class LoginScreen extends StatelessWidget {
                 ),
                 const SizedBox(
                   height: 64,
+                ),
+                Text(
+                  'Full Name',
+                  style: GoogleFonts.dmSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: -1,
+                        blurRadius: 5,
+                        offset:
+                            const Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: const TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Enter your full name',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.white,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 32,
                 ),
                 Text(
                   'Email',
@@ -140,11 +183,9 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/home');
-                    },
+                    onPressed: () {},
                     child: const Text(
-                      'LOGIN',
+                      'SIGN UP',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -184,16 +225,16 @@ class LoginScreen extends StatelessWidget {
                     Text(
                       'You don\'t have an account yet?',
                       style: GoogleFonts.dmSans(
-                        color: const Color(0xff130160),
+                        color: Color(0xff130160),
                         fontSize: 14,
                       ),
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/register');
+                        Navigator.pushNamed(context, '/login');
                       },
                       child: const Text(
-                        'Sign Up',
+                        'Sign in',
                         style: TextStyle(
                           color: Color(0xffFF9228),
                           fontSize: 14,

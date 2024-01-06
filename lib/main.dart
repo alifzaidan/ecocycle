@@ -1,5 +1,7 @@
+import 'package:ecocycle/screens/home_screen.dart';
 import 'package:ecocycle/screens/login_screen.dart';
 import 'package:ecocycle/screens/onboarding_screen.dart';
+import 'package:ecocycle/screens/register_screen.dart';
 import 'package:ecocycle/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Ecocycle',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingScreen(),
         '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }
