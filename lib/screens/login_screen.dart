@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
                 Text(
                   'Welcome Back',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.dmSans(
+                  style: GoogleFonts.poppins(
                     fontSize: 30,
                     fontWeight: FontWeight.w700,
                   ),
@@ -141,7 +141,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamed(context, '/navigation');
                     },
                     child: const Text(
                       'LOGIN',

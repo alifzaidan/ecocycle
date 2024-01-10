@@ -1,5 +1,6 @@
 import 'package:ecocycle/screens/home_screen.dart';
 import 'package:ecocycle/screens/login_screen.dart';
+import 'package:ecocycle/screens/navigation.dart';
 import 'package:ecocycle/screens/onboarding_screen.dart';
 import 'package:ecocycle/screens/register_screen.dart';
 import 'package:ecocycle/screens/splash_screen.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => const OnboardingScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/navigation': (context) => const Navigation(),
         '/home': (context) => const HomeScreen(),
       },
     );
