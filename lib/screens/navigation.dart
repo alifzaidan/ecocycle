@@ -4,8 +4,8 @@ import 'package:ecocycle/screens/home_screen.dart';
 import 'package:ecocycle/screens/profile_screen.dart';
 import 'package:ecocycle/screens/scan_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 List<Widget> _buildScreens() {
   return [
@@ -20,29 +20,28 @@ List<Widget> _buildScreens() {
 List<PersistentBottomNavBarItem> _navBarsItems() {
   return [
     PersistentBottomNavBarItem(
-      icon: const Icon(FontAwesomeIcons.house),
-      activeColorPrimary: const Color(0xffFF9228),
+      icon: const Icon(PhosphorIconsRegular.house, size: 30),
+      activeColorPrimary: const Color(0xFF166A3E),
       inactiveColorPrimary: const Color(0xffA49EB5),
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(FontAwesomeIcons.cartShopping),
-      activeColorPrimary: const Color(0xffFF9228),
+      icon: const Icon(PhosphorIconsRegular.clockCounterClockwise, size: 30),
+      activeColorPrimary: const Color(0xFF166A3E),
       inactiveColorPrimary: const Color(0xffA49EB5),
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(FontAwesomeIcons.expand),
-      activeColorPrimary: const Color(0xff130160),
-      activeColorSecondary: const Color(0xffFF9228),
-      inactiveColorPrimary: Colors.white,
+      icon: const Icon(PhosphorIconsRegular.scan, size: 36),
+      activeColorPrimary: const Color(0xFF2BD07A),
+      activeColorSecondary: Colors.white,
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(FontAwesomeIcons.clockRotateLeft),
-      activeColorPrimary: const Color(0xffFF9228),
+      icon: const Icon(PhosphorIconsRegular.article, size: 30),
+      activeColorPrimary: const Color(0xFF166A3E),
       inactiveColorPrimary: const Color(0xffA49EB5),
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(FontAwesomeIcons.solidUser),
-      activeColorPrimary: const Color(0xffFF9228),
+      icon: const Icon(PhosphorIconsRegular.user, size: 30),
+      activeColorPrimary: const Color(0xFF166A3E),
       inactiveColorPrimary: const Color(0xffA49EB5),
     ),
   ];
@@ -102,7 +101,7 @@ class _NavigationState extends State<Navigation> {
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
-      navBarStyle: NavBarStyle.style17,
+      navBarStyle: NavBarStyle.style15,
     );
   }
 }

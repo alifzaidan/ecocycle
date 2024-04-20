@@ -1,7 +1,9 @@
+import 'package:ecocycle/screens/scan_screen.dart';
+import 'package:ecocycle/screens/upload_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -20,7 +22,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 _welcomeBanner(),
                 const SizedBox(height: 28),
-                _homeMenu(),
+                _homeMenu(context),
                 const SizedBox(height: 28),
                 _historyScan(),
               ],
@@ -31,136 +33,66 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Column _historyScan() {
-    return Column(
+  Row _appBar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Recent Your Garbage',
+          'Hello,\nDila Sofiana',
           style: GoogleFonts.dmSans(
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
         ),
-        const SizedBox(height: 15),
-        SizedBox(
-          height: 180 * 2,
-          child: ListView.separated(
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                height: 170,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: -2,
-                      blurRadius: 8,
-                      offset: const Offset(0, 0), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        const CircleAvatar(backgroundColor: Colors.amber),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Botol Plastik',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text(
-                              '2.000 - 5.000 / kg',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Container(
-                          height: 35,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffF2F2F4),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/detail');
-                            },
-                            child: const Text(
-                              'See Detail',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Container(
-                          height: 35,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFDE1D5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/sell');
-                            },
-                            child: const Text(
-                              'Sell Now',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '5 days ago',
-                      textAlign: TextAlign.end,
-                      style: GoogleFonts.dmSans(fontSize: 14),
-                    )
-                  ],
-                ),
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(height: 20);
-            },
-            itemCount: 2,
-          ),
-        )
+        const CircleAvatar(backgroundColor: Colors.amber),
       ],
     );
   }
 
-  Column _homeMenu() {
+  Container _welcomeBanner() {
+    return Container(
+        height: 170,
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xff28A77D), Color(0xff0D0140)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(10),
+          image: const DecorationImage(
+            image: AssetImage('assets/images/ilustrasi1.png'),
+            alignment: Alignment.bottomRight,
+            scale: 18,
+          ),
+        ),
+        child: RichText(
+          text: TextSpan(
+            text: 'Don’t Throw Away\n',
+            style: GoogleFonts.dmSans(
+              color: Colors.white,
+              fontSize: 24,
+              height: 3,
+              fontWeight: FontWeight.w700,
+            ),
+            children: [
+              TextSpan(
+                text: 'Recycle for\nAnother Day',
+                style: GoogleFonts.dmSans(
+                  color: Colors.white,
+                  fontSize: 20,
+                  height: 1.2,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+
+  Column _homeMenu(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -181,24 +113,158 @@ class HomeScreen extends StatelessWidget {
             StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 2.4,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xffAFECFE),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(FontAwesomeIcons.trash, size: 32),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Scan your trash',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 16,
+              child: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
                         ),
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
+                        height: 400,
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              PhosphorIconsBold.minus,
+                              size: 50,
+                              color: Color(0xFF176B3F),
+                            ),
+                            const SizedBox(height: 25),
+                            Text(
+                              'What would you like to add?',
+                              style: GoogleFonts.dmSans(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Would you like to scan your trash by camera or add trash picture manually?',
+                              style: GoogleFonts.dmSans(
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 42),
+                            Container(
+                              height: 62,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFF28A77D),
+                                    Color(0xFF2BD07A),
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const ScanScreen(),
+                                  ));
+                                  // Navigator.pushNamed(context, '/scan');
+                                },
+                                child: const Text(
+                                  'SCAN YOUR TRASH',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Container(
+                              height: 62,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFDDDEDD),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const UploadScreen(),
+                                  ));
+                                  // Navigator.pushNamed(context, '/upload');
+                                },
+                                child: const Text(
+                                  'ADD MANUALLY',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF99ABC6).withOpacity(0.2),
+                        spreadRadius: 0,
+                        blurRadius: 32,
+                        offset:
+                            const Offset(0, 4), // changes position of shadow
                       ),
                     ],
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFFF9C951),
+                                Color(0xFFFFEAB6),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.all(16),
+                          child: const Icon(
+                            PhosphorIconsBold.scan,
+                            size: 32,
+                            color: Color(0xFF176B3F),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Scan Your Trash',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -208,19 +274,45 @@ class HomeScreen extends StatelessWidget {
               mainAxisCellCount: 1.2,
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xffBEAFFE),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF99ABC6).withOpacity(0.2),
+                      spreadRadius: 0,
+                      blurRadius: 32,
+                      offset: const Offset(0, 4), // changes position of shadow
+                    ),
+                  ],
                 ),
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(FontAwesomeIcons.locationDot),
-                      const SizedBox(height: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFFF9C951),
+                              Color(0xFFFFEAB6),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(10),
+                        child: const Icon(
+                          PhosphorIconsBold.mapPinLine,
+                          color: Color(0xFF176B3F),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
                       Text(
                         'Nearby Drop Point',
                         style: GoogleFonts.dmSans(
                           fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -233,19 +325,45 @@ class HomeScreen extends StatelessWidget {
               mainAxisCellCount: 1.2,
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xffFFD6AD),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF99ABC6).withOpacity(0.2),
+                      spreadRadius: 0,
+                      blurRadius: 32,
+                      offset: const Offset(0, 4), // changes position of shadow
+                    ),
+                  ],
                 ),
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(FontAwesomeIcons.bookOpen),
-                      const SizedBox(height: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFFF9C951),
+                              Color(0xFFFFEAB6),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(10),
+                        child: const Icon(
+                          PhosphorIconsBold.article,
+                          color: Color(0xFF176B3F),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
                       Text(
-                        'Garbage Catalog',
+                        'Garbage Article',
                         style: GoogleFonts.dmSans(
                           fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -259,69 +377,142 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Container _welcomeBanner() {
-    return Container(
-      height: 170,
-      padding: const EdgeInsets.symmetric(horizontal: 17),
-      decoration: BoxDecoration(
-        color: const Color(0xff130160),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Don’t throw away\nrecycle for another day',
-                style: GoogleFonts.dmSans(
-                  color: Colors.white,
-                  fontSize: 20,
-                  height: 1.2,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                height: 35,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: const Color(0xffFF9228),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'See Detail',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          // Image.asset('assets/images/ilustrasiberanda.png'),
-        ],
-      ),
-    );
-  }
-
-  Row _appBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Column _historyScan() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Welcome Attahdid',
+          'Recent Your Garbage',
           style: GoogleFonts.dmSans(
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
         ),
-        const CircleAvatar(backgroundColor: Colors.amber),
+        const SizedBox(height: 15),
+        SizedBox(
+          height: 210 * 2,
+          child: ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Container(
+                height: 186,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF99ABC6).withOpacity(0.2),
+                      spreadRadius: 0,
+                      blurRadius: 40,
+                      offset: const Offset(0, 4), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        const CircleAvatar(backgroundColor: Color(0xffF2F2F4)),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Botol Plastik',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 160,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffF2F2F4),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Text(
+                            'Worthy Non-Organic',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Container(
+                          width: 160,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffF2F2F4),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Text(
+                            'Rp. 5.000 - 8.000 / kg',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '25 minute ago',
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.dmSans(
+                            fontSize: 12,
+                            color: const Color(0xFFAAA6B9),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/');
+                          },
+                          child: Container(
+                            width: 160,
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFD3ECE5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Text(
+                              'See Detail',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: 20);
+            },
+            itemCount: 2,
+          ),
+        )
       ],
     );
   }

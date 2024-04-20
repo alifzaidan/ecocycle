@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class ScanScreen extends StatelessWidget {
-  const ScanScreen({super.key});
+class UploadScreen extends StatelessWidget {
+  const UploadScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class ScanScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 _contentPage(),
                 const Spacer(),
-                _scanButton(),
+                _uploadButton(),
               ],
             ),
           ),
@@ -40,11 +41,53 @@ class ScanScreen extends StatelessWidget {
     );
   }
 
-  Container _contentPage() {
-    return Container();
+  Column _contentPage() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Upload Your Garbage',
+          style: GoogleFonts.dmSans(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'Add your garbage image to detect category',
+          style: GoogleFonts.dmSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Container(
+          height: 200,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(),
+          ),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(PhosphorIconsRegular.fileArrowUp),
+                const SizedBox(width: 10),
+                Text(
+                  'Upload Garbage Picture',
+                  style: GoogleFonts.dmSans(
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
-  Container _scanButton() {
+  Container _uploadButton() {
     return Container(
       height: 62,
       width: double.infinity,
@@ -62,7 +105,7 @@ class ScanScreen extends StatelessWidget {
       child: TextButton(
         onPressed: () {},
         child: const Text(
-          'SCAN IMAGE',
+          'UPLOAD IMAGE',
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,

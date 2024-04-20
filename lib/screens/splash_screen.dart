@@ -17,13 +17,25 @@ class SplashScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        color: const Color(0xff130160),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF28A77D),
+              Color(0xFF0D0140),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/logo.png'),
-            const SizedBox(height: 1),
+            Image.asset(
+              'assets/images/logo_putih.png',
+              width: 60,
+            ),
+            const SizedBox(height: 4),
             Text(
               'Ecocycle',
               textAlign: TextAlign.center,

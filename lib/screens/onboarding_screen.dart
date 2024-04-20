@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -14,17 +15,29 @@ class OnboardingScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  'Ecocycle',
-                  textAlign: TextAlign.right,
-                  style: GoogleFonts.dmSans(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Image.asset(
+                      'assets/images/logo_hijau.png',
+                      width: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Ecocycle',
+                      textAlign: TextAlign.right,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 90),
-                Image.asset('assets/images/onboarding_pict.png'),
-                const SizedBox(height: 112),
+                const SizedBox(height: 84),
+                Image.asset(
+                  'assets/images/ilustrasi2.png',
+                ),
+                const SizedBox(height: 50),
                 RichText(
                   text: TextSpan(
                     text: 'Welcome ',
@@ -37,7 +50,7 @@ class OnboardingScreen extends StatelessWidget {
                       TextSpan(
                         text: 'to',
                         style: GoogleFonts.dmSans(
-                          color: const Color(0xffFF9228),
+                          color: const Color(0xFF16693D),
                         ),
                       ),
                       const TextSpan(
@@ -62,9 +75,9 @@ class OnboardingScreen extends StatelessWidget {
         onPressed: () {
           Navigator.pushNamed(context, '/login');
         },
-        backgroundColor: const Color(0xff130160),
+        backgroundColor: const Color(0xFF16693D),
         child: const Icon(
-          Icons.arrow_forward_sharp,
+          PhosphorIconsRegular.arrowRight,
           color: Colors.white,
         ),
       ),
