@@ -178,14 +178,24 @@ class RegisterScreen extends StatelessWidget {
                 Container(
                   height: 62,
                   margin: const EdgeInsets.symmetric(horizontal: 32),
+                  width: double.infinity,
                   decoration: BoxDecoration(
-                    color: const Color(0xff130160),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF28A77D),
+                        Color(0xFF2BD07A),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/navigation');
+                    },
                     child: const Text(
-                      'SIGN UP',
+                      'REGISTER',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -200,16 +210,19 @@ class RegisterScreen extends StatelessWidget {
                 Container(
                   height: 62,
                   margin: const EdgeInsets.symmetric(horizontal: 32),
+                  width: double.infinity,
                   decoration: BoxDecoration(
-                    color: const Color(0xffD6CDFE),
+                    color: const Color(0xFFDDDEDD),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/navigation');
+                    },
                     child: const Text(
                       'SIGN IN WITH GOOGLE',
                       style: TextStyle(
-                        color: Color(0xff130160),
+                        color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
@@ -223,9 +236,8 @@ class RegisterScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'You don\'t have an account yet?',
+                      'Already have an account?',
                       style: GoogleFonts.dmSans(
-                        color: Color(0xff130160),
                         fontSize: 14,
                       ),
                     ),
@@ -234,10 +246,12 @@ class RegisterScreen extends StatelessWidget {
                         Navigator.pushNamed(context, '/login');
                       },
                       child: const Text(
-                        'Sign in',
+                        'Login',
                         style: TextStyle(
-                          color: Color(0xffFF9228),
+                          color: Color(0xFF28A77D),
                           fontSize: 14,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Color(0xFF28A77D),
                         ),
                       ),
                     ),
