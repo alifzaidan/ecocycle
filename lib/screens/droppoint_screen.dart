@@ -172,7 +172,6 @@ class DropPointScreen extends StatelessWidget {
       child: Container(
         height: MediaQuery.of(context).size.height - 200,
         decoration: const BoxDecoration(
-          color: Colors.amber,
           image: DecorationImage(
             image: AssetImage("assets/images/maps.png"),
             fit: BoxFit.cover,

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class ScanScreen extends StatelessWidget {
+class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
 
+  @override
+  State<ScanScreen> createState() => _ScanScreenState();
+}
+
+class _ScanScreenState extends State<ScanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +40,6 @@ class ScanScreen extends StatelessWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      color: Colors.black,
       icon: const Icon(PhosphorIconsBold.arrowLeft),
     );
   }

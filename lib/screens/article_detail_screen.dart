@@ -4,22 +4,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ArticleDetailScreen extends StatelessWidget {
-  const ArticleDetailScreen({Key? key}) : super(key: key);
+  const ArticleDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                _headerProfile(context),
-                _textContainer(),
-                _additionalContent(),
-                _bottomIcons()
-              ],
-            ),
+          child: Column(
+            children: [
+              _headerProfile(context),
+              _textContainer(),
+              _additionalContent(),
+              _bottomIcons()
+            ],
           ),
         ),
       ),
@@ -30,13 +28,6 @@ class ArticleDetailScreen extends StatelessWidget {
     return Container(
       height: 180,
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -47,18 +38,16 @@ class ArticleDetailScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back),
-                color: Colors.black,
+                icon: const Icon(PhosphorIconsRegular.arrowLeft),
               ),
               const SizedBox(width: 48),
               IconButton(
                 onPressed: () {},
-                icon: Icon(Icons.more_vert),
-                color: Colors.black,
+                icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
               ),
             ],
           ),
-          CircleAvatar(
+          const CircleAvatar(
             radius: 35,
             backgroundColor: Colors.blue,
           ),
@@ -69,20 +58,21 @@ class ArticleDetailScreen extends StatelessWidget {
 
   Widget _textContainer() {
     return Container(
-      padding: EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.only(top: 15),
       child: Column(
         children: [
           Text(
             "Mengenal Macam - macam Jenis Plastik",
-            style: GoogleFonts.lato(
-                fontSize: 15, color: Colors.black, fontWeight: FontWeight.w700),
+            style: GoogleFonts.dmSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           const SizedBox(height: 5),
           Text(
             'Thoriq Khoir',
-            style: GoogleFonts.lato(
-              fontSize: 12,
-              color: Colors.grey,
+            style: GoogleFonts.dmSans(
+              fontSize: 14,
             ),
           ),
         ],
@@ -92,9 +82,8 @@ class ArticleDetailScreen extends StatelessWidget {
 
   Widget _additionalContent() {
     return Container(
-      color: Colors.white,
-      padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
-      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
+      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -108,7 +97,7 @@ class ArticleDetailScreen extends StatelessWidget {
             child: Center(
               child: Text(
                 'Foto Artikel',
-                style: GoogleFonts.lato(
+                style: GoogleFonts.dmSans(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -118,10 +107,9 @@ class ArticleDetailScreen extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             "Plastik telah menjadi bagian tak terpisahkan dari kehidupan modern kita. Namun, tidak semua plastik diciptakan sama. Beragam jenis plastik memiliki karakteristik unik yang memengaruhi kegunaan, daur ulang, dan dampak lingkungan. Dalam artikel ini, kita akan menjelajahi beberapa macam plastik yang paling umum digunakan: 1.⁠ ⁠PET (Polyethylene Terephthalate): Biasanya digunakan untuk botol air minum, botol soda, dan wadah makanan ringan. PET adalah plastik yang sering didaur ulang untuk dijadikan serat poliester. 2.⁠ ⁠HDPE (High-Density Polyethylene): HDPE dikenal karena kekuatannya yang tinggi dan ketahanannya terhadap bahan kimia. Biasanya digunakan untuk botol susu, botol sampo, pipa air, dan wadah deterjen. 3.⁠ ⁠PVC (Polyvinyl Chloride): PVC adalah plastik serbaguna yang digunakan dalam berbagai aplikasi seperti pipa, lantai vinyl, jendela, dan mainan.Plastik telah menjadi bagian tak terpisahkan dari kehidupan modern kita. Namun, tidak semua plastik diciptakan sama. Beragam jenis plastik memiliki karakteristik unik yang memengaruhi kegunaan, daur ulang, dan dampak lingkungan. Dalam artikel ini, kita akan menjelajahi beberapa macam plastik yang paling umum digunakan: 1.⁠ ⁠PET (Polyethylene Terephthalate): Biasanya digunakan untuk botol air minum, botol soda, dan wadah makanan ringan. PET adalah plastik yang sering didaur ulang untuk dijadikan serat poliester. 2.⁠ ⁠HDPE (High-Density Polyethylene): HDPE dikenal karena kekuatannya yang tinggi dan ketahanannya terhadap bahan kimia. Biasanya digunakan untuk botol susu, botol sampo, pipa air, dan wadah deterjen. 3.⁠ ⁠PVC (Polyvinyl Chloride): PVC adalah plastik serbaguna yang digunakan dalam berbagai aplikasi seperti pipa, lantai vinyl, jendela, dan mainan.",
-            style: GoogleFonts.lato(
+            style: GoogleFonts.dmSans(
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              color: Colors.black,
               height: 2,
             ),
             textAlign: TextAlign.justify,
@@ -133,23 +121,26 @@ class ArticleDetailScreen extends StatelessWidget {
 
   Widget _bottomIcons() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.only(top: 20, bottom: 36),
+      decoration: const BoxDecoration(
+        color: Color(0xFFE9F5F1),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _buildIconWithText(
-            Icons.favorite_border,
+            PhosphorIconsRegular.heart,
             '12',
           ),
           _buildIconWithText(
-            CupertinoIcons.bubble_left,
+            PhosphorIconsRegular.chat,
             '10',
           ),
           _buildIconWithText(
             PhosphorIconsRegular.shareFat,
             '2',
           ),
-          _buildIconWithoutText(Icons.bookmark_border),
+          _buildIconWithoutText(PhosphorIconsRegular.bookmarkSimple),
         ],
       ),
     );
@@ -163,11 +154,10 @@ class ArticleDetailScreen extends StatelessWidget {
           color: Colors.grey,
           size: 20,
         ),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Text(
           count,
-          style: TextStyle(
-            fontSize: 12,
+          style: const TextStyle(
             color: Colors.grey,
           ),
         ),

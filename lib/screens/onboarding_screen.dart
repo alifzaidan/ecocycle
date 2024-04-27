@@ -42,15 +42,17 @@ class OnboardingScreen extends StatelessWidget {
                   text: TextSpan(
                     text: 'Welcome ',
                     style: GoogleFonts.dmSans(
-                        fontSize: 40,
-                        fontWeight: FontWeight.w700,
-                        height: 1,
-                        color: Colors.black),
+                      fontSize: 40,
+                      fontWeight: FontWeight.w700,
+                      height: 1,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                     children: [
                       TextSpan(
                         text: 'to',
                         style: GoogleFonts.dmSans(
                           color: const Color(0xFF16693D),
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const TextSpan(

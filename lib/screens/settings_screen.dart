@@ -42,7 +42,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       onPressed: () {
         Navigator.pop(context);
       },
-      color: Colors.black,
       icon: const Icon(PhosphorIconsBold.arrowLeft),
     );
   }
@@ -62,7 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.primary,
             boxShadow: [
               BoxShadow(
                 color: const Color(0xFF99ABC6).withOpacity(0.2),
@@ -76,12 +75,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListTile(
             leading: const Icon(
               PhosphorIconsRegular.bellRinging,
-              color: Color(0xFF000000),
             ),
             title: Text(
               'Notification',
               style: GoogleFonts.dmSans(
-                color: const Color(0xFF000000),
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
@@ -101,7 +98,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.primary,
             boxShadow: [
               BoxShadow(
                 color: const Color(0xFF99ABC6).withOpacity(0.2),
@@ -115,12 +112,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListTile(
             leading: const Icon(
               PhosphorIconsRegular.moon,
-              color: Color(0xFF000000),
             ),
             title: Text(
               'Dark Mode',
               style: GoogleFonts.dmSans(
-                color: const Color(0xFF000000),
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
@@ -140,7 +135,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.primary,
             boxShadow: [
               BoxShadow(
                 color: const Color(0xFF99ABC6).withOpacity(0.2),
@@ -154,19 +149,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListTile(
             leading: const Icon(
               PhosphorIconsRegular.lockKey,
-              color: Color(0xFF000000),
             ),
             title: Text(
               'Forgot Password',
               style: GoogleFonts.dmSans(
-                color: const Color(0xFF000000),
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
             ),
             trailing: const Icon(
               PhosphorIconsRegular.caretRight,
-              color: Color(0xFF000000),
             ),
           ),
         ),
@@ -177,9 +169,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               context: context,
               builder: (context) {
                 return Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
                     ),
@@ -228,10 +220,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         child: TextButton(
                           onPressed: () {},
-                          child: const Text(
+                          child: Text(
                             'YES',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.primary,
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                             ),
@@ -248,10 +240,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         child: TextButton(
                           onPressed: () {},
-                          child: const Text(
+                          child: Text(
                             'CANCEL',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.primary,
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                             ),
@@ -267,7 +259,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.primary,
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFF99ABC6).withOpacity(0.2),
@@ -281,19 +273,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: ListTile(
               leading: const Icon(
                 PhosphorIconsRegular.signOut,
-                color: Color(0xFF000000),
               ),
               title: Text(
                 'Logout',
                 style: GoogleFonts.dmSans(
-                  color: const Color(0xFF000000),
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               trailing: const Icon(
                 PhosphorIconsRegular.caretRight,
-                color: Color(0xFF000000),
               ),
             ),
           ),

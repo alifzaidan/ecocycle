@@ -1,3 +1,4 @@
+import 'package:ecocycle/screens/article_screen.dart';
 import 'package:ecocycle/screens/droppoint_screen.dart';
 import 'package:ecocycle/screens/scan_screen.dart';
 import 'package:ecocycle/screens/upload_screen.dart';
@@ -6,9 +7,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +50,7 @@ class HomeScreen extends StatelessWidget {
           style: GoogleFonts.dmSans(
             fontSize: 24,
             fontWeight: FontWeight.w700,
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
         const CircleAvatar(backgroundColor: Colors.amber),
@@ -102,7 +108,6 @@ class HomeScreen extends StatelessWidget {
           style: GoogleFonts.dmSans(
             fontSize: 20,
             fontWeight: FontWeight.w700,
-            color: Colors.black,
           ),
         ),
         const SizedBox(height: 15),
@@ -120,9 +125,9 @@ class HomeScreen extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(20),
                             topRight: Radius.circular(20),
                           ),
@@ -221,7 +226,7 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFFFFF),
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -283,7 +288,7 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFFFFF),
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -333,50 +338,61 @@ class HomeScreen extends StatelessWidget {
             StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 1.2,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF99ABC6).withOpacity(0.2),
-                      spreadRadius: 0,
-                      blurRadius: 32,
-                      offset: const Offset(0, 4), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFFF9C951),
-                              Color(0xFFFFEAB6),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.all(10),
-                        child: const Icon(
-                          PhosphorIconsBold.article,
-                          color: Color(0xFF176B3F),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Garbage Article',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const ArticleScreen();
+                  }));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .shadow
+                            .withOpacity(0.2),
+                        spreadRadius: 0,
+                        blurRadius: 32,
+                        offset:
+                            const Offset(0, 4), // changes position of shadow
                       ),
                     ],
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFFF9C951),
+                                Color(0xFFFFEAB6),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          child: const Icon(
+                            PhosphorIconsBold.article,
+                            color: Color(0xFF176B3F),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Garbage Article',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -396,7 +412,6 @@ class HomeScreen extends StatelessWidget {
           style: GoogleFonts.dmSans(
             fontSize: 20,
             fontWeight: FontWeight.w700,
-            color: Colors.black,
           ),
         ),
         const SizedBox(height: 15),
@@ -410,7 +425,7 @@ class HomeScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(

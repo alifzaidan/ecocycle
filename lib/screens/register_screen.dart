@@ -65,15 +65,18 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const TextField(
+                  child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Enter your full name',
-                      enabledBorder: OutlineInputBorder(
+                      hintStyle: GoogleFonts.dmSans(
+                        color: Colors.grey,
+                      ),
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.white,
                         ),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.black,
                         ),
@@ -108,15 +111,18 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const TextField(
+                  child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Enter your email',
-                      enabledBorder: OutlineInputBorder(
+                      hintStyle: GoogleFonts.dmSans(
+                        color: Colors.grey,
+                      ),
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.white,
                         ),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.black,
                         ),
@@ -151,20 +157,23 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const TextField(
+                  child: TextField(
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: 'Enter your password',
-                      suffixIcon: Icon(
+                      hintStyle: GoogleFonts.dmSans(
+                        color: Colors.grey,
+                      ),
+                      suffixIcon: const Icon(
                         Icons.visibility_off,
                         color: Colors.black,
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.white,
                         ),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.black,
                         ),

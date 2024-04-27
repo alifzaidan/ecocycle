@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,7 +214,7 @@ class ProfileScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.primary,
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFF99ABC6).withOpacity(0.2),
@@ -223,19 +228,16 @@ class ProfileScreen extends StatelessWidget {
             child: ListTile(
               leading: Icon(
                 menuProfileList[index].icon,
-                color: const Color(0xFF000000),
               ),
               title: Text(
                 menuProfileList[index].name,
                 style: GoogleFonts.dmSans(
-                  color: const Color(0xFF000000),
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               trailing: const Icon(
                 PhosphorIconsRegular.caretRight,
-                color: Color(0xFF000000),
               ),
             ),
           ),

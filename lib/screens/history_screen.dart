@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class HistoryScreen extends StatelessWidget {
+class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
 
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +66,6 @@ class HistoryScreen extends StatelessWidget {
                 prefixIcon: const Icon(PhosphorIconsRegular.magnifyingGlass),
                 hintText: 'Botol Plastik',
                 hintStyle: GoogleFonts.dmSans(),
-                fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
@@ -92,7 +96,7 @@ class HistoryScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(

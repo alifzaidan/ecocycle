@@ -94,20 +94,20 @@ class _NavigationState extends State<Navigation> {
       screens: _buildScreens(),
       items: _navBarsItems(),
       confineInSafeArea: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
       stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
         borderRadius: BorderRadius.circular(0),
-        colorBehindNavBar: Colors.white,
-        boxShadow: const [
+        // colorBehindNavBar: Colors.white,
+        boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: Theme.of(context).colorScheme.shadow,
             blurRadius: 20,
             spreadRadius: -10,
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
           )
         ],
       ),

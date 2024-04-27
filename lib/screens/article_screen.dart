@@ -2,11 +2,15 @@ import 'package:ecocycle/screens/article_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:flutter/cupertino.dart';
 
-class ArticleScreen extends StatelessWidget {
+class ArticleScreen extends StatefulWidget {
   const ArticleScreen({super.key});
 
+  @override
+  State<ArticleScreen> createState() => _ArticleScreenState();
+}
+
+class _ArticleScreenState extends State<ArticleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +69,6 @@ class ArticleScreen extends StatelessWidget {
                 prefixIcon: const Icon(PhosphorIconsRegular.magnifyingGlass),
                 hintText: 'Cari Artikel',
                 hintStyle: GoogleFonts.dmSans(),
-                fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
@@ -126,7 +129,7 @@ class ArticleScreen extends StatelessWidget {
       margin: const EdgeInsets.only(right: 15),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xffF2F2F4),
+        color: Colors.grey[300],
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
@@ -160,7 +163,7 @@ class ArticleScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 24, vertical: 12),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(25),
                         boxShadow: [
                           BoxShadow(
@@ -284,8 +287,10 @@ class ArticleScreen extends StatelessWidget {
                             const SizedBox(width: 15),
                             Row(
                               children: [
-                                const Icon(PhosphorIconsRegular.chat,
-                                    color: Colors.grey),
+                                const Icon(
+                                  PhosphorIconsRegular.chat,
+                                  color: Colors.grey,
+                                ),
                                 const SizedBox(width: 5),
                                 Text(
                                   '10',
@@ -299,8 +304,10 @@ class ArticleScreen extends StatelessWidget {
                             const SizedBox(width: 15),
                             Row(
                               children: [
-                                const Icon(PhosphorIconsRegular.shareFat,
-                                    color: Colors.grey),
+                                const Icon(
+                                  PhosphorIconsRegular.shareFat,
+                                  color: Colors.grey,
+                                ),
                                 const SizedBox(width: 5),
                                 Text(
                                   '2',

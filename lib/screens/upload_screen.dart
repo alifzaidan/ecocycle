@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class UploadScreen extends StatelessWidget {
+class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
 
+  @override
+  State<UploadScreen> createState() => _UploadScreenState();
+}
+
+class _UploadScreenState extends State<UploadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +41,6 @@ class UploadScreen extends StatelessWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      color: Colors.black,
       icon: const Icon(PhosphorIconsBold.arrowLeft),
     );
   }
@@ -65,7 +69,7 @@ class UploadScreen extends StatelessWidget {
           height: 200,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(),
+            border: Border.all(color: Theme.of(context).colorScheme.onPrimary),
           ),
           child: Center(
             child: Row(
