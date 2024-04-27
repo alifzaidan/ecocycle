@@ -1,3 +1,4 @@
+import 'package:ecocycle/screens/article_detail_screen.dart';
 import 'package:ecocycle/screens/article_screen.dart';
 import 'package:ecocycle/screens/history_screen.dart';
 import 'package:ecocycle/screens/home_screen.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/scan': (context) => const ScanScreen(),
         '/upload': (context) => const UploadScreen(),
         '/article': (context) => const ArticleScreen(),
+        '/articledetail': (context) => const ArticleDetailScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/settings': (context) => const SettingsScreen(),
       },
