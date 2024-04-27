@@ -1,3 +1,4 @@
+import 'package:ecocycle/screens/droppoint_screen.dart';
 import 'package:ecocycle/screens/scan_screen.dart';
 import 'package:ecocycle/screens/upload_screen.dart';
 import 'package:flutter/material.dart';
@@ -227,8 +228,7 @@ class HomeScreen extends StatelessWidget {
                         color: const Color(0xFF99ABC6).withOpacity(0.2),
                         spreadRadius: 0,
                         blurRadius: 32,
-                        offset:
-                            const Offset(0, 4), // changes position of shadow
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
@@ -272,50 +272,60 @@ class HomeScreen extends StatelessWidget {
             StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 1.2,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF99ABC6).withOpacity(0.2),
-                      spreadRadius: 0,
-                      blurRadius: 32,
-                      offset: const Offset(0, 4), // changes position of shadow
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DropPointScreen(),
                     ),
-                  ],
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFFF9C951),
-                              Color(0xFFFFEAB6),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.all(10),
-                        child: const Icon(
-                          PhosphorIconsBold.mapPinLine,
-                          color: Color(0xFF176B3F),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Nearby Drop Point',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF99ABC6).withOpacity(0.2),
+                        spreadRadius: 0,
+                        blurRadius: 32,
+                        offset: const Offset(0, 4),
                       ),
                     ],
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFFF9C951),
+                                Color(0xFFFFEAB6),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          child: const Icon(
+                            PhosphorIconsBold.mapPinLine,
+                            color: Color(0xFF176B3F),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Nearby Drop Point',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
