@@ -174,7 +174,6 @@ class _ResultScreenState extends State<ResultScreen> {
         onSelectionChanged: (value) {
           setState(() {
             _selectedSegment = value.first;
-            print(_selectedSegment);
           });
         },
         segments: const <ButtonSegment<Result>>[

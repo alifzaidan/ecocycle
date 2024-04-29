@@ -141,7 +141,7 @@ class DropPointScreen extends StatelessWidget {
                     height: 100,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Color(0xFFF5F4F6),
+                      color: const Color(0xFFF5F4F6),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(

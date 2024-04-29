@@ -78,9 +78,9 @@ class TutorialDetailScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 5),
-        Container(
+        const SizedBox(
           width: double.infinity,
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
