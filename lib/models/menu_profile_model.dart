@@ -16,19 +16,15 @@ var menuProfileList = [
     icon: PhosphorIconsRegular.notification,
   ),
   MenuProfile(
+    name: 'Bookmark',
+    icon: PhosphorIconsRegular.bookmark,
+  ),
+  MenuProfile(
     name: 'Language',
     icon: PhosphorIconsRegular.globe,
   ),
   MenuProfile(
     name: 'Help Center',
     icon: PhosphorIconsRegular.question,
-  ),
-  MenuProfile(
-    name: 'Term of Service',
-    icon: PhosphorIconsRegular.book,
-  ),
-  MenuProfile(
-    name: 'Privacy Policy',
-    icon: PhosphorIconsRegular.fileLock,
   ),
 ];

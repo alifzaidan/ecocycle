@@ -1,3 +1,4 @@
+import 'package:ecocycle/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -64,7 +65,10 @@ class _ScanScreenState extends State<ScanScreen> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ResultScreen()));
+        },
         child: const Text(
           'SCAN IMAGE',
           style: TextStyle(
