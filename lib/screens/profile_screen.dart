@@ -210,7 +210,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, index) => InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return menuProfileList[index].page;
+            }));
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(

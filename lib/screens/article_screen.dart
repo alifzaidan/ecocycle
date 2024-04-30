@@ -1,6 +1,8 @@
 import 'package:ecocycle/models/article_model.dart';
+import 'package:ecocycle/models/bookmark_model.dart';
 import 'package:ecocycle/screens/article_detail_screen.dart';
 import 'package:ecocycle/services/api_services.dart';
+import 'package:ecocycle/services/bookmark_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -298,7 +300,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                               right: 0,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 12),
+                                    horizontal: 24, vertical: 8),
                                 decoration: const BoxDecoration(
                                   color: Color(0xFFE9F5F1),
                                   borderRadius: BorderRadius.only(
@@ -360,10 +362,27 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                       ],
                                     ),
                                     const Spacer(),
-                                    const Icon(
-                                      PhosphorIconsRegular.bookmarkSimple,
-                                      color: Colors.grey,
-                                    )
+                                    IconButton(
+                                      onPressed: () {
+                                        final newBookmark = Bookmark(
+                                          id: 2,
+                                          author: article[index].author,
+                                          title: article[index].title,
+                                          description:
+                                              article[index].description,
+                                          url: article[index].url,
+                                          urlToImage: article[index].urlToImage,
+                                          publishedAt:
+                                              article[index].publishedAt,
+                                          content: article[index].content,
+                                        );
+                                        DBBookmark().insert(newBookmark);
+                                      },
+                                      icon: const Icon(
+                                        PhosphorIconsRegular.bookmarkSimple,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -383,7 +402,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
                   );
                 } else {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: Color(0xFF2BD07A),
+                    ),
                   );
                 }
               },
