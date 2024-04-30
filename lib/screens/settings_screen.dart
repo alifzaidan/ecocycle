@@ -1,6 +1,8 @@
+import 'package:ecocycle/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -11,7 +13,31 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool isNotification = true;
-  bool isDarkMode = false;
+
+  void muatPreferensiModeGelap() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      modeGelap = prefs.getBool('modeGelap') ?? false;
+    });
+  }
+
+  void simpanPreferensiModeGelap(bool mode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('modeGelap', mode);
+  }
+
+  void pengubahModeGelap(bool mode) {
+    setState(() {
+      modeGelap = mode;
+    });
+    simpanPreferensiModeGelap(mode);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    muatPreferensiModeGelap();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,10 +147,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             trailing: Switch(
-              value: isDarkMode,
+              value: modeGelap,
               onChanged: (value) {
                 setState(() {
-                  isDarkMode = value;
+                  modeGelap = value;
+                  pengubahModeGelap(value);
                 });
               },
               activeColor: const Color(0xFF2BD07A),

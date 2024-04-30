@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+bool modeGelap = false;
+
 ThemeData lightMode = ThemeData(
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
