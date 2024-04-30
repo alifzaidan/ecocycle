@@ -1,3 +1,4 @@
+import 'package:ecocycle/models/article_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -7,15 +8,17 @@ class ArticleDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final article = ModalRoute.of(context)!.settings.arguments as Article;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              _headerProfile(context),
-              _textContainer(),
-              _additionalContent(),
-              _bottomIcons()
+              _headerProfile(context, article),
+              _textContainer(article),
+              _additionalContent(article),
+              // _bottomIcons()
             ],
           ),
         ),
@@ -23,7 +26,7 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Container _headerProfile(BuildContext context) {
+  Container _headerProfile(BuildContext context, Article article) {
     return Container(
       height: 180,
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -46,30 +49,32 @@ class ArticleDetailScreen extends StatelessWidget {
               ),
             ],
           ),
-          const CircleAvatar(
+          CircleAvatar(
             radius: 35,
-            backgroundColor: Colors.blue,
+            foregroundImage: NetworkImage(article.urlToImage ??
+                "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg"),
           ),
         ],
       ),
     );
   }
 
-  Widget _textContainer() {
+  Widget _textContainer(Article article) {
     return Container(
       padding: const EdgeInsets.only(top: 15),
       child: Column(
         children: [
           Text(
-            "Mengenal Macam - macam Jenis Plastik",
+            article.title ?? 'Title Not Found',
             style: GoogleFonts.dmSans(
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 5),
           Text(
-            'Thoriq Khoir',
+            article.author ?? 'Author Not Found',
             style: GoogleFonts.dmSans(
               fontSize: 14,
             ),
@@ -79,33 +84,34 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _additionalContent() {
+  Widget _additionalContent(Article article) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            height: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color: Colors.grey.withOpacity(0.5),
-            ),
-            child: Center(
-              child: Text(
-                'Foto Artikel',
-                style: GoogleFonts.dmSans(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
+          // Container(
+          //   width: double.infinity,
+          //   height: 150,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(25),
+          //     color: Colors.grey.withOpacity(0.5),
+          //   ),
+          //   child: Center(
+          //     child: Text(
+          //       'Foto Artikel',
+          //       style: GoogleFonts.dmSans(
+          //         fontSize: 18,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          const Divider(),
           const SizedBox(height: 10),
           Text(
-            "Plastik telah menjadi bagian tak terpisahkan dari kehidupan modern kita. Namun, tidak semua plastik diciptakan sama. Beragam jenis plastik memiliki karakteristik unik yang memengaruhi kegunaan, daur ulang, dan dampak lingkungan. Dalam artikel ini, kita akan menjelajahi beberapa macam plastik yang paling umum digunakan: 1.⁠ ⁠PET (Polyethylene Terephthalate): Biasanya digunakan untuk botol air minum, botol soda, dan wadah makanan ringan. PET adalah plastik yang sering didaur ulang untuk dijadikan serat poliester. 2.⁠ ⁠HDPE (High-Density Polyethylene): HDPE dikenal karena kekuatannya yang tinggi dan ketahanannya terhadap bahan kimia. Biasanya digunakan untuk botol susu, botol sampo, pipa air, dan wadah deterjen. 3.⁠ ⁠PVC (Polyvinyl Chloride): PVC adalah plastik serbaguna yang digunakan dalam berbagai aplikasi seperti pipa, lantai vinyl, jendela, dan mainan.Plastik telah menjadi bagian tak terpisahkan dari kehidupan modern kita. Namun, tidak semua plastik diciptakan sama. Beragam jenis plastik memiliki karakteristik unik yang memengaruhi kegunaan, daur ulang, dan dampak lingkungan. Dalam artikel ini, kita akan menjelajahi beberapa macam plastik yang paling umum digunakan: 1.⁠ ⁠PET (Polyethylene Terephthalate): Biasanya digunakan untuk botol air minum, botol soda, dan wadah makanan ringan. PET adalah plastik yang sering didaur ulang untuk dijadikan serat poliester. 2.⁠ ⁠HDPE (High-Density Polyethylene): HDPE dikenal karena kekuatannya yang tinggi dan ketahanannya terhadap bahan kimia. Biasanya digunakan untuk botol susu, botol sampo, pipa air, dan wadah deterjen. 3.⁠ ⁠PVC (Polyvinyl Chloride): PVC adalah plastik serbaguna yang digunakan dalam berbagai aplikasi seperti pipa, lantai vinyl, jendela, dan mainan.",
+            article.content ?? 'Content Not Found',
             style: GoogleFonts.dmSans(
               fontSize: 12,
               fontWeight: FontWeight.w500,

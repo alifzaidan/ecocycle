@@ -1,6 +1,9 @@
+import 'package:ecocycle/models/article_model.dart';
 import 'package:ecocycle/screens/article_detail_screen.dart';
+import 'package:ecocycle/services/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ArticleScreen extends StatefulWidget {
@@ -11,6 +14,8 @@ class ArticleScreen extends StatefulWidget {
 }
 
 class _ArticleScreenState extends State<ArticleScreen> {
+  ApiArticle articles = ApiArticle();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,199 +149,245 @@ class _ArticleScreenState extends State<ArticleScreen> {
   }
 
   Column _article(BuildContext context) {
-    double totalArticle = 3;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding:
-              const EdgeInsets.only(top: 20, bottom: 72, left: 20, right: 20),
-          child: SizedBox(
-            height: 300 * totalArticle,
-            child: ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Stack(
-                  children: [
-                    Container(
-                      height: 270,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF99ABC6).withOpacity(0.2),
-                            spreadRadius: 0,
-                            blurRadius: 40,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const CircleAvatar(
-                                radius: 25,
-                                backgroundColor: Colors.blueAccent,
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Thoriq Khoir',
-                                    style: GoogleFonts.dmSans(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        PhosphorIconsRegular.clock,
-                                        color: Colors.grey[400],
-                                        size: 17,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        '21 minutes ago',
-                                        style: GoogleFonts.dmSans(
-                                          fontSize: 11,
-                                          color: Colors.grey[400],
-                                        ),
-                                      ),
-                                    ],
+            padding:
+                const EdgeInsets.only(top: 20, bottom: 72, left: 20, right: 20),
+            child: FutureBuilder(
+              future: articles.getArticle(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Article>? article = snapshot.data;
+
+                  return SizedBox(
+                    height: 300 * article!.length.toDouble(),
+                    child: ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Stack(
+                          children: [
+                            Container(
+                              height: 270,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                borderRadius: BorderRadius.circular(25),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF99ABC6)
+                                        .withOpacity(0.2),
+                                    spreadRadius: 0,
+                                    blurRadius: 40,
+                                    offset: const Offset(0, 4),
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Text(
-                            "Mengenal Macam - macam Jenis Plastik",
-                            style: GoogleFonts.dmSans(
-                                fontWeight: FontWeight.w700, fontSize: 14),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            "Plastik telah menjadi bagian tak terpisahkan dari kehidupan modern kita. Namun, tidak semua plastik diciptakan sama. Beragam jenis plastik memiliki karakteristik unik yang memengaruhi kegunaan, daur ulang, dan dampak lingkungan. Dalam artikel ini, kita akan menjelajahi beberapa macam plastik yang paling umum digunakan:",
-                            style: GoogleFonts.dmSans(
-                              fontSize: 12,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 25,
+                                        foregroundImage: NetworkImage(
+                                            article[index].urlToImage!),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            article[index].author!,
+                                            style: GoogleFonts.dmSans(
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                PhosphorIconsRegular.clock,
+                                                color: Colors.grey[400],
+                                                size: 17,
+                                              ),
+                                              const SizedBox(width: 5),
+                                              Text(
+                                                DateFormat('dd MMM yyyy')
+                                                    .format(DateTime.parse(
+                                                        article[index]
+                                                            .publishedAt!)),
+                                                style: GoogleFonts.dmSans(
+                                                  fontSize: 11,
+                                                  color: Colors.grey[400],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 15),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.all(0),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ArticleDetailScreen(),
+                                          settings: RouteSettings(
+                                              arguments: article[index]),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      article[index].title!,
+                                      style: GoogleFonts.dmSans(
+                                        fontWeight: FontWeight.w700,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        fontSize: 14,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    article[index].content!,
+                                    style: GoogleFonts.dmSans(
+                                      fontSize: 12,
+                                    ),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ArticleDetailScreen(),
+                                          settings: RouteSettings(
+                                              arguments: article[index]),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "See more",
+                                      style: GoogleFonts.dmSans(
+                                          fontSize: 12, color: Colors.amber),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ArticleDetailScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "See more",
-                              style: GoogleFonts.dmSans(
-                                  fontSize: 12, color: Colors.amber),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFE9F5F1),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(25),
-                            bottomRight: Radius.circular(25),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  PhosphorIconsFill.heart,
-                                  color: Colors.red,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  '12',
-                                  style: GoogleFonts.dmSans(
-                                    fontSize: 12,
-                                    color: Colors.grey,
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFE9F5F1),
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(25),
+                                    bottomRight: Radius.circular(25),
                                   ),
                                 ),
-                              ],
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          PhosphorIconsFill.heart,
+                                          color: Colors.red,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          '12',
+                                          style: GoogleFonts.dmSans(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(width: 15),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          PhosphorIconsRegular.chat,
+                                          color: Colors.grey,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          '10',
+                                          style: GoogleFonts.dmSans(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(width: 15),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          PhosphorIconsRegular.shareFat,
+                                          color: Colors.grey,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          '2',
+                                          style: GoogleFonts.dmSans(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    const Icon(
+                                      PhosphorIconsRegular.bookmarkSimple,
+                                      color: Colors.grey,
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
-                            const SizedBox(width: 15),
-                            Row(
-                              children: [
-                                const Icon(
-                                  PhosphorIconsRegular.chat,
-                                  color: Colors.grey,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  '10',
-                                  style: GoogleFonts.dmSans(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(width: 15),
-                            Row(
-                              children: [
-                                const Icon(
-                                  PhosphorIconsRegular.shareFat,
-                                  color: Colors.grey,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  '2',
-                                  style: GoogleFonts.dmSans(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Spacer(),
-                            const Icon(
-                              PhosphorIconsRegular.bookmarkSimple,
-                              color: Colors.grey,
-                            )
                           ],
-                        ),
-                      ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(height: 20);
+                      },
+                      itemCount: article.length,
                     ),
-                  ],
-                );
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text("Error: ${snapshot.error}"),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
               },
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 20);
-              },
-              itemCount: totalArticle.toInt(),
-            ),
-          ),
-        ),
+            )),
       ],
     );
   }
