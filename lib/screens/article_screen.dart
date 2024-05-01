@@ -363,9 +363,10 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                     ),
                                     const Spacer(),
                                     IconButton(
-                                      onPressed: () {
+                                      onPressed: () async {
                                         final newBookmark = Bookmark(
-                                          id: 2,
+                                          id: await DBBookmark().getLastId() +
+                                              1,
                                           author: article[index].author,
                                           title: article[index].title,
                                           description:
@@ -376,7 +377,12 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                               article[index].publishedAt,
                                           content: article[index].content,
                                         );
-                                        DBBookmark().insert(newBookmark);
+                                        await DBBookmark().insert(newBookmark);
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text('Bookmarked!'),
+                                        ));
                                       },
                                       icon: const Icon(
                                         PhosphorIconsRegular.bookmarkSimple,

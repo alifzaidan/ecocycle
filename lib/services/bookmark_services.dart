@@ -62,68 +62,26 @@ class DBBookmark {
     );
   }
 
-  Future<void> delete(Bookmark bookmark) async {
+  Future<void> delete(int id) async {
     final db = await database;
     await db.delete(
       'bookmark',
       where: 'id = ?',
-      whereArgs: [bookmark.id],
+      whereArgs: [id],
     );
   }
 
-  // Future openDB() async {
-  //   _database = await openDatabase(
-  //     join(await getDatabasesPath(), 'database_bookmark.db'),
-  //     version: 1,
-  //     onCreate: (db, version) async {
-  //       await db.execute(
-  //         'CREATE TABLE bookmark(id INTEGER PRIMARY KEY, author TEXT, title TEXT, description TEXT, url TEXT, urlToImage TEXT, publishedAt TEXT, content TEXT,)',
-  //       );
-  //     },
-  //   );
-  //   return _database;
-  // }
+  getLastId() async {
+    final db = await database;
+    var table = await db.rawQuery('SELECT MAX(id) as id FROM bookmark');
+    int id = int.parse(table.first['id'].toString());
+    return id;
+  }
 
-  // Future insertBookmark(Bookmark bookmark) async {
-  //   await openDB();
-  //   return await _database.insert('bookmark', bookmark.toMap(),
-  //       conflictAlgorithm: ConflictAlgorithm.replace);
-  // }
-
-  // Future<List<Bookmark>> listBookmark() async {
-  //   await openDB();
-  //   final List<Map<String, dynamic>> maps = await _database.query('bookmark');
-
-  //   return List.generate(maps.length, (i) {
-  //     return Bookmark(
-  //       id: maps[i]['id'],
-  //       author: maps[i]['author'],
-  //       title: maps[i]['title'],
-  //       description: maps[i]['description'],
-  //       url: maps[i]['url'],
-  //       urlToImage: maps[i]['urlToImage'],
-  //       publishedAt: maps[i]['publishedAt'],
-  //       content: maps[i]['content'],
-  //     );
-  //   });
-  // }
-
-  // Future<int> updateBookmark(Bookmark bookmark) async {
-  //   await openDB();
-  //   return await _database.update(
-  //     'bookmark',
-  //     bookmark.toMap(),
-  //     where: 'id =? ',
-  //     whereArgs: [bookmark.id],
-  //   );
-  // }
-
-  // Future<void> deleteBookmark(Bookmark bookmark) async {
-  //   await openDB();
-  //   return await _database.delete(
-  //     'bookmark',
-  //     where: 'id = ?',
-  //     whereArgs: [bookmark.id],
-  //   );
-  // }
+  getTitleinBookmark(String title) async {
+    final db = await database;
+    var table =
+        await db.rawQuery('SELECT title FROM bookmark WHERE title = "$title"');
+    return table.first['title'].toString();
+  }
 }
