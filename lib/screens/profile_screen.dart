@@ -1,5 +1,7 @@
 import 'package:ecocycle/models/menu_profile_model.dart';
 import 'package:ecocycle/screens/settings_screen.dart';
+import 'package:ecocycle/services/firebase_auth_services.dart';
+import 'package:ecocycle/services/user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -12,6 +14,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final FirebaseAuthService _authService = FirebaseAuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Container _headerProfile(BuildContext context) {
     return Container(
       height: 320,
+      width: double.infinity,
       padding: const EdgeInsets.only(top: 72, left: 24, right: 24),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -44,160 +49,182 @@ class _ProfileScreenState extends State<ProfileScreen> {
           bottomRight: Radius.circular(30),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              const Icon(
-                PhosphorIconsRegular.shareFat,
-                color: Colors.white,
-              ),
-              IconButton(
-                padding: const EdgeInsets.all(0),
-                alignment: Alignment.centerRight,
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const SettingsScreen();
-                  }));
-                },
-                icon: const Icon(
-                  PhosphorIconsRegular.gear,
-                  color: Colors.white,
+      child: FutureBuilder(
+        future: DbUser.getUserByEmail(_authService.getCurrentUser()!),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Icon(
+                      PhosphorIconsRegular.shareFat,
+                      color: Colors.white,
+                    ),
+                    IconButton(
+                      padding: const EdgeInsets.all(0),
+                      alignment: Alignment.centerRight,
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return const SettingsScreen();
+                        }));
+                      },
+                      icon: const Icon(
+                        PhosphorIconsRegular.gear,
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.white,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Dila Sofiana',
-                    style: GoogleFonts.dmSans(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    'Malang, Indonesia',
-                    style: GoogleFonts.dmSans(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      text: '3',
-                      style: GoogleFonts.dmSans(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextSpan(
-                          text: ' Organic',
+                        const CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.white,
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          width: 150,
+                          child: Text(
+                            snapshot.data![0]['name'],
+                            style: GoogleFonts.dmSans(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          'Malang, Indonesia',
                           style: GoogleFonts.dmSans(
+                            color: Colors.white,
                             fontSize: 14,
-                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  RichText(
-                    text: TextSpan(
-                      text: '8',
-                      style: GoogleFonts.dmSans(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextSpan(
-                          text: ' Worthy Non-Organic',
-                          style: GoogleFonts.dmSans(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
+                        RichText(
+                          text: TextSpan(
+                            text: snapshot.data![0]['organic'].toString(),
+                            style: GoogleFonts.dmSans(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: ' Organic',
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RichText(
+                          text: TextSpan(
+                            text:
+                                snapshot.data![0]['worthNonOrganic'].toString(),
+                            style: GoogleFonts.dmSans(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: ' Worthy Non-Organic',
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RichText(
+                          text: TextSpan(
+                            text: snapshot.data![0]['nonWorthNonOrganic']
+                                .toString(),
+                            style: GoogleFonts.dmSans(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: ' Non-Worthy Non-Organic',
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        Container(
+                          width: 180,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFFFFF).withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.all(0)),
+                            ),
+                            onPressed: () {},
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Edit Profile',
+                                  style: TextStyle(
+                                    color: Color(0xFFFFFFFF),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Icon(
+                                  PhosphorIconsRegular.pencilSimpleLine,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  RichText(
-                    text: TextSpan(
-                      text: '6',
-                      style: GoogleFonts.dmSans(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: ' Non-Worthy Non-Organic',
-                          style: GoogleFonts.dmSans(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error retrieving user data: ${snapshot.error}');
+          } else {
+            return const Center(
+              child: Text(
+                "Loading...",
+                style: TextStyle(color: Colors.white),
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Container(
-            width: 180,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFFFFF).withOpacity(0.2),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: TextButton(
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-              ),
-              onPressed: () {},
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Edit Profile',
-                    style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Icon(
-                    PhosphorIconsRegular.pencilSimpleLine,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+            );
+          }
+        },
       ),
     );
   }

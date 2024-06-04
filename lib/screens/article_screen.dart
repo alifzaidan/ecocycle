@@ -252,7 +252,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                       );
                                     },
                                     child: Text(
-                                      article[index].title!,
+                                      article[index].title ?? "No Title",
                                       style: GoogleFonts.dmSans(
                                         fontWeight: FontWeight.w700,
                                         color: Theme.of(context)

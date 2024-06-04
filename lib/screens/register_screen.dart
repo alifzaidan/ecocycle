@@ -1,8 +1,56 @@
+import 'package:ecocycle/models/user_model.dart';
+import 'package:ecocycle/services/firebase_auth_services.dart';
+import 'package:ecocycle/services/user_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final FirebaseAuthService _authService = FirebaseAuthService();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
+
+  Future<void> _register() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    User? user = await _authService.signUpWithEmailAndPassword(
+      email: email,
+      password: password,
+      context: context,
+    );
+
+    if (user != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('User is successfully created'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pushNamed(context, '/navigation');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cannot create user'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +114,7 @@ class RegisterScreen extends StatelessWidget {
                     ],
                   ),
                   child: TextField(
+                    controller: _nameController,
                     decoration: InputDecoration(
                       hintText: 'Enter your full name',
                       hintStyle: GoogleFonts.dmSans(
@@ -112,6 +161,7 @@ class RegisterScreen extends StatelessWidget {
                     ],
                   ),
                   child: TextField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       hintText: 'Enter your email',
                       hintStyle: GoogleFonts.dmSans(
@@ -159,6 +209,7 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   child: TextField(
                     obscureText: true,
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       hintText: 'Enter your password',
                       hintStyle: GoogleFonts.dmSans(
@@ -201,7 +252,16 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/navigation');
+                      final userbaru = UserModel(
+                        name: _nameController.text,
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                        organic: 0,
+                        worthNonOrganic: 0,
+                        nonWorthNonOrganic: 0,
+                      );
+                      DbUser.addData(itemuser: userbaru);
+                      _register();
                     },
                     child: const Text(
                       'REGISTER',
@@ -225,9 +285,7 @@ class RegisterScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/navigation');
-                    },
+                    onPressed: () {},
                     child: const Text(
                       'SIGN IN WITH GOOGLE',
                       style: TextStyle(

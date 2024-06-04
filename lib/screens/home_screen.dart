@@ -2,6 +2,8 @@ import 'package:ecocycle/screens/article_screen.dart';
 import 'package:ecocycle/screens/droppoint_screen.dart';
 import 'package:ecocycle/screens/scan_screen.dart';
 import 'package:ecocycle/screens/upload_screen.dart';
+import 'package:ecocycle/services/firebase_auth_services.dart';
+import 'package:ecocycle/services/user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseAuthService _authService = FirebaseAuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,14 +49,30 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Hello,\nDila Sofiana',
-          style: GoogleFonts.dmSans(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-        ),
+        FutureBuilder(
+            future: DbUser.getUserByEmail(_authService.getCurrentUser()!),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                String name = snapshot.data![0]['name'];
+                if (name.length > 15) {
+                  List<String> nameParts = name.split(' ');
+                  name = '${nameParts[0]} ${nameParts[1]}';
+                }
+
+                return Text(
+                  "Hello,\n$name",
+                  style: GoogleFonts.dmSans(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error retrieving user data: ${snapshot.error}');
+              } else {
+                return const Text("Loading...");
+              }
+            }),
         const CircleAvatar(backgroundColor: Colors.amber),
       ],
     );

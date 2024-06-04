@@ -1,8 +1,53 @@
+import 'package:ecocycle/services/firebase_auth_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final FirebaseAuthService _authService = FirebaseAuthService();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
+
+  Future<void> _login() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    User? user = await _authService.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+      context: context,
+    );
+
+    if (user != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pushNamed(context, '/navigation');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login failed'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +111,7 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
                   child: TextField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       hintText: 'Enter your email',
                       hintStyle: GoogleFonts.dmSans(
@@ -113,6 +159,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: TextField(
                     obscureText: true,
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       hintText: 'Enter your password',
                       hintStyle: GoogleFonts.dmSans(
@@ -155,7 +202,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/navigation');
+                      _login();
                     },
                     child: const Text(
                       'LOGIN',
@@ -179,9 +226,7 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/navigation');
-                    },
+                    onPressed: () {},
                     child: const Text(
                       'SIGN IN WITH GOOGLE',
                       style: TextStyle(
