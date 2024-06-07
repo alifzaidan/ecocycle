@@ -50,6 +50,7 @@ dependencies:
     rxdart: ^0.27.7
     flutter_local_notifications: ^17.1.2
     firebase_messaging: ^14.7.19
+    image_picker: ^1.0.8
 
 dev_dependencies:
     flutter_test:

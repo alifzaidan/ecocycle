@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:ecocycle/helper/local_notification_helper.dart';
+import 'package:ecocycle/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
@@ -10,6 +15,24 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
+  File? selectedImage;
+
+  Future getImage() async {
+    final ImagePicker picker = ImagePicker();
+    // Pick an image.
+    final XFile? imagePicked =
+        await picker.pickImage(source: ImageSource.gallery);
+    if (imagePicked != null) {
+      selectedImage = File(imagePicked.path);
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,25 +89,79 @@ class _UploadScreenState extends State<UploadScreen> {
         ),
         const SizedBox(height: 20),
         Container(
-          height: 200,
+          height: 300,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Theme.of(context).colorScheme.onPrimary),
           ),
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(PhosphorIconsRegular.fileArrowUp),
-                const SizedBox(width: 10),
-                Text(
-                  'Upload Garbage Picture',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 14,
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    selectedImage != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: SizedBox(
+                              height: 298,
+                              width: MediaQuery.of(context).size.width,
+                              child:
+                                  Image.file(selectedImage!, fit: BoxFit.cover),
+                            ),
+                          )
+                        : Container(),
+                    if (selectedImage == null)
+                      TextButton(
+                        onPressed: () async {
+                          await getImage();
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              PhosphorIconsRegular.fileArrowUp,
+                              color: Colors.black,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Upload Garbage Picture',
+                              style: GoogleFonts.dmSans(
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              if (selectedImage != null)
+                Positioned(
+                  bottom: 10,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          selectedImage = null;
+                        });
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                      ),
+                      child: const Text(
+                        'Delete',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ],
-            ),
+            ],
           ),
         ),
       ],
@@ -107,7 +184,15 @@ class _UploadScreenState extends State<UploadScreen> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          NotificationHelper.showNotification(
+            title: "Berhasil Memindai Sampah",
+            body: "Data berhasil didapatkan",
+            payload: "scan_image",
+          );
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ResultScreen()));
+        },
         child: const Text(
           'UPLOAD IMAGE',
           style: TextStyle(

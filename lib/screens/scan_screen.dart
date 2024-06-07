@@ -51,8 +51,19 @@ class _ScanScreenState extends State<ScanScreen> {
     );
   }
 
-  Container _contentPage() {
-    return Container();
+  Column _contentPage() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 540,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Theme.of(context).colorScheme.onPrimary),
+          ),
+        ),
+      ],
+    );
   }
 
   Container _scanButton() {
