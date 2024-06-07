@@ -1,3 +1,4 @@
+import 'package:ecocycle/helper/local_notification_helper.dart';
 import 'package:ecocycle/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -10,6 +11,11 @@ class ScanScreen extends StatefulWidget {
 }
 
 class _ScanScreenState extends State<ScanScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +72,11 @@ class _ScanScreenState extends State<ScanScreen> {
       ),
       child: TextButton(
         onPressed: () {
+          NotificationHelper.showNotification(
+            title: "Berhasil Memindai Sampah",
+            body: "Data berhasil didapatkan",
+            payload: "scan_image",
+          );
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const ResultScreen()));
         },
