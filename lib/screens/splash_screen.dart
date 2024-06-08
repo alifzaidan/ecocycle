@@ -1,4 +1,6 @@
+import 'package:ecocycle/screens/navigation.dart';
 import 'package:ecocycle/screens/onboarding_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,11 +10,23 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 3)).then((value) {
-      Navigator.of(context).pushAndRemoveUntil(
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const Navigation(),
+          ),
+          (route) => false,
+        );
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const OnboardingScreen(),
           ),
-          (route) => false);
+          (route) => false,
+        );
+      }
     });
 
     return Scaffold(
