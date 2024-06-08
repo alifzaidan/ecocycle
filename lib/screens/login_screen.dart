@@ -1,6 +1,5 @@
 import 'package:ecocycle/screens/register_screen.dart';
-import 'package:ecocycle/services/firebase_auth_services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ecocycle/services/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,7 +11,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final FirebaseAuthService _authService = FirebaseAuthService();
+  final LoginServices _loginServices = LoginServices();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
@@ -28,33 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-  }
-
-  Future<void> _login() async {
-    String email = _emailController.text;
-    String password = _passwordController.text;
-    User? user = await _authService.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-      context: context,
-    );
-
-    if (user != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login successfully'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pushNamed(context, '/navigation');
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login failed'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
   }
 
   @override
@@ -235,7 +207,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         );
                       } else {
-                        _login();
+                        _loginServices.login(
+                          _emailController.text,
+                          _passwordController.text,
+                          context,
+                        );
                         _emailController.clear();
                         _passwordController.clear();
                       }
@@ -262,7 +238,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'Mohon maaf, fitur ini belum tersedia. Silahkan login menggunakan email dan password.'),
+                          backgroundColor: Colors.black,
+                        ),
+                      );
+                    },
                     child: const Text(
                       'SIGN IN WITH GOOGLE',
                       style: TextStyle(

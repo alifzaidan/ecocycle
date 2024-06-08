@@ -45,38 +45,52 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Row _appBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        FutureBuilder(
-            future: DbUser.getUserByEmail(_authService.getCurrentUser()!),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                String name = snapshot.data![0]['name'];
-                if (name.length > 15) {
-                  List<String> nameParts = name.split(' ');
-                  name = '${nameParts[0]} ${nameParts[1]}';
-                }
+  Widget _appBar() {
+    return FutureBuilder(
+        future: DbUser.getUserByEmail(_authService.getCurrentUser()!),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            String name = snapshot.data![0]['name'];
+            String jenisKelamin = snapshot.data![0]['jenisKelamin'];
+            String avatarUser;
 
-                return Text(
+            if (name.length > 15) {
+              List<String> nameParts = name.split(' ');
+              name = '${nameParts[0]} ${nameParts[1]}';
+            }
+
+            if (jenisKelamin == 'Laki-laki') {
+              avatarUser = 'avatar_men';
+            } else if (jenisKelamin == 'Perempuan') {
+              avatarUser = 'avatar_women';
+            } else {
+              avatarUser = 'avatar_none';
+            }
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
                   "Hello,\n$name",
                   style: GoogleFonts.dmSans(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
-                );
-              } else if (snapshot.hasError) {
-                return Text('Error retrieving user data: ${snapshot.error}');
-              } else {
-                return const Text("Loading...");
-              }
-            }),
-        const CircleAvatar(backgroundColor: Colors.amber),
-      ],
-    );
+                ),
+                CircleAvatar(
+                  backgroundImage: AssetImage("assets/images/$avatarUser.png"),
+                  radius: 24,
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error retrieving user data: ${snapshot.error}');
+          } else {
+            return const Text("Loading...");
+          }
+        });
   }
 
   Container _welcomeBanner() {

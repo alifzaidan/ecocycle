@@ -68,7 +68,7 @@ Future<void> main() async {
 
   if (message != null) {
     print("Meluncurkan aplikasi dari notifikasi latar belakang");
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       navigatorKey.currentState!.push(MaterialPageRoute(
         builder: (context) => const SplashScreen(),
       ));

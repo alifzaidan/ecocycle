@@ -1,7 +1,6 @@
 import 'package:ecocycle/models/user_model.dart';
-import 'package:ecocycle/services/firebase_auth_services.dart';
+import 'package:ecocycle/services/register_services.dart';
 import 'package:ecocycle/services/user_services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,12 +12,13 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final FirebaseAuthService _authService = FirebaseAuthService();
+  final RegisterService _registerService = RegisterService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController =
       TextEditingController();
+  String _selectedGender = 'Belum Memilih';
   bool _obscureText1 = true;
   bool _obscureText2 = true;
 
@@ -39,33 +39,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-  }
-
-  Future<void> _register() async {
-    String email = _emailController.text;
-    String password = _passwordController.text;
-    User? user = await _authService.signUpWithEmailAndPassword(
-      email: email,
-      password: password,
-      context: context,
-    );
-
-    if (user != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('User is successfully created'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pushNamed(context, '/navigation');
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Cannot create user'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
   }
 
   @override
@@ -150,6 +123,61 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Colors.black,
                         ),
                       ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                Text(
+                  'Jenis Kelamin',
+                  style: GoogleFonts.dmSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: -1,
+                        blurRadius: 5,
+                        offset:
+                            const Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      value: _selectedGender,
+                      items: <String>['Belum Memilih', 'Laki-laki', 'Perempuan']
+                          .map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: GoogleFonts.dmSans(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedGender = newValue!;
+                        });
+                      },
                     ),
                   ),
                 ),
@@ -380,6 +408,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       } else {
                         final userbaru = UserModel(
                           name: _nameController.text,
+                          jenisKelamin: _selectedGender,
                           email: _emailController.text,
                           password: _passwordController.text,
                           organic: 0,
@@ -387,7 +416,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           nonWorthNonOrganic: 0,
                         );
                         DbUser.addData(itemuser: userbaru);
-                        _register();
+                        _registerService.register(
+                          _emailController.text,
+                          _passwordController.text,
+                          context,
+                        );
                         _nameController.clear();
                         _emailController.clear();
                         _passwordController.clear();
@@ -416,7 +449,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'Mohon maaf, fitur ini belum tersedia. Silahkan Register dengan mengisikan form diatas.'),
+                          backgroundColor: Colors.black,
+                        ),
+                      );
+                    },
                     child: const Text(
                       'SIGN IN WITH GOOGLE',
                       style: TextStyle(

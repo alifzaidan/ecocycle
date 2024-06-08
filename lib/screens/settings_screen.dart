@@ -1,7 +1,9 @@
+import 'package:ecocycle/screens/login_screen.dart';
 import 'package:ecocycle/theme/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -249,8 +251,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: TextButton(
                           onPressed: () {
                             _auth.signOut();
-                            Navigator.of(context)
-                                .popUntil(ModalRoute.withName("/login"));
+                            pushScreen(
+                              context,
+                              settings: const RouteSettings(name: "/login"),
+                              screen: const LoginScreen(),
+                            );
                           },
                           child: Text(
                             'YES',

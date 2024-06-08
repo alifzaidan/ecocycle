@@ -52,6 +52,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: FutureBuilder(
         future: DbUser.getUserByEmail(_authService.getCurrentUser()!),
         builder: (context, snapshot) {
+          String jenisKelamin = snapshot.data![0]['jenisKelamin'];
+          String avatarUser;
+
+          if (jenisKelamin == 'Laki-laki') {
+            avatarUser = 'avatar_men';
+          } else if (jenisKelamin == 'Perempuan') {
+            avatarUser = 'avatar_women';
+          } else {
+            avatarUser = 'avatar_none';
+          }
+
           if (snapshot.hasData) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -87,9 +98,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
+                          backgroundImage:
+                              AssetImage("assets/images/$avatarUser.png"),
                           radius: 30,
-                          backgroundColor: Colors.white,
                         ),
                         const SizedBox(height: 10),
                         SizedBox(
@@ -104,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         Text(
-                          'Malang, Indonesia',
+                          'Indonesia',
                           style: GoogleFonts.dmSans(
                             color: Colors.white,
                             fontSize: 14,
