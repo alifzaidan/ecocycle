@@ -1,3 +1,4 @@
+import 'package:ecocycle/screens/register_screen.dart';
 import 'package:ecocycle/services/firebase_auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuthService _authService = FirebaseAuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   void dispose() {
@@ -112,6 +120,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: TextField(
                     controller: _emailController,
+                    cursorColor: Colors.black,
+                    style: GoogleFonts.dmSans(
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter your email',
                       hintStyle: GoogleFonts.dmSans(
@@ -152,22 +164,30 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: -1,
                         blurRadius: 5,
-                        offset:
-                            const Offset(0, 2), // changes position of shadow
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
                   child: TextField(
-                    obscureText: true,
+                    obscureText: _obscureText,
                     controller: _passwordController,
+                    cursorColor: Colors.black,
+                    style: GoogleFonts.dmSans(
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter your password',
                       hintStyle: GoogleFonts.dmSans(
                         color: Colors.grey,
                       ),
-                      suffixIcon: const Icon(
-                        Icons.visibility_off,
-                        color: Colors.black,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.black,
+                        ),
+                        onPressed: _togglePasswordVisibility,
                       ),
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -202,9 +222,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      _login();
-                      _emailController.clear();
-                      _passwordController.clear();
+                      if (_emailController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please enter your email'),
+                          ),
+                        );
+                      } else if (_passwordController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please enter your password'),
+                          ),
+                        );
+                      } else {
+                        _login();
+                        _emailController.clear();
+                        _passwordController.clear();
+                      }
                     },
                     child: const Text(
                       'LOGIN',
@@ -253,7 +287,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/register');
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    const RegisterScreen(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              var begin = const Offset(1.0, 0.0);
+                              var end = Offset.zero;
+                              var curve = Curves.ease;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
+                        _emailController.clear();
+                        _passwordController.clear();
                       },
                       child: const Text(
                         'Sign Up',

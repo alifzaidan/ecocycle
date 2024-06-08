@@ -17,6 +17,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _repeatPasswordController =
+      TextEditingController();
+  bool _obscureText1 = true;
+  bool _obscureText2 = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText1 = !_obscureText1;
+    });
+  }
+
+  void _toggleRepeatPasswordVisibility() {
+    setState(() {
+      _obscureText2 = !_obscureText2;
+    });
+  }
 
   @override
   void dispose() {
@@ -115,6 +131,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   child: TextField(
                     controller: _nameController,
+                    cursorColor: Colors.black,
+                    style: GoogleFonts.dmSans(
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter your full name',
                       hintStyle: GoogleFonts.dmSans(
@@ -162,6 +182,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   child: TextField(
                     controller: _emailController,
+                    cursorColor: Colors.black,
+                    style: GoogleFonts.dmSans(
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter your email',
                       hintStyle: GoogleFonts.dmSans(
@@ -208,16 +232,86 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ],
                   ),
                   child: TextField(
-                    obscureText: true,
+                    obscureText: _obscureText1,
                     controller: _passwordController,
+                    cursorColor: Colors.black,
+                    style: GoogleFonts.dmSans(
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter your password',
                       hintStyle: GoogleFonts.dmSans(
                         color: Colors.grey,
                       ),
-                      suffixIcon: const Icon(
-                        Icons.visibility_off,
-                        color: Colors.black,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText1
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.black,
+                        ),
+                        onPressed: _togglePasswordVisibility,
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.white,
+                        ),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                Text(
+                  'Repeat Password',
+                  style: GoogleFonts.dmSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: -1,
+                        blurRadius: 5,
+                        offset:
+                            const Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    obscureText: _obscureText2,
+                    controller: _repeatPasswordController,
+                    cursorColor: Colors.black,
+                    style: GoogleFonts.dmSans(
+                      color: Colors.black,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Repeat your password',
+                      hintStyle: GoogleFonts.dmSans(
+                        color: Colors.grey,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText2
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.black,
+                        ),
+                        onPressed: _toggleRepeatPasswordVisibility,
                       ),
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -252,18 +346,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      final userbaru = UserModel(
-                        name: _nameController.text,
-                        email: _emailController.text,
-                        password: _passwordController.text,
-                        organic: 0,
-                        worthNonOrganic: 0,
-                        nonWorthNonOrganic: 0,
-                      );
-                      DbUser.addData(itemuser: userbaru);
-                      _register();
-                      _emailController.clear();
-                      _passwordController.clear();
+                      if (_nameController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please enter your full name'),
+                          ),
+                        );
+                      } else if (_emailController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please enter your email'),
+                          ),
+                        );
+                      } else if (_passwordController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please enter your password'),
+                          ),
+                        );
+                      } else if (_repeatPasswordController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please repeat your password'),
+                          ),
+                        );
+                      } else if (_passwordController.text !=
+                          _repeatPasswordController.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Passwords do not match'),
+                          ),
+                        );
+                      } else {
+                        final userbaru = UserModel(
+                          name: _nameController.text,
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                          organic: 0,
+                          worthNonOrganic: 0,
+                          nonWorthNonOrganic: 0,
+                        );
+                        DbUser.addData(itemuser: userbaru);
+                        _register();
+                        _nameController.clear();
+                        _emailController.clear();
+                        _passwordController.clear();
+                        _repeatPasswordController.clear();
+                      }
                     },
                     child: const Text(
                       'REGISTER',
@@ -312,7 +441,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/login');
+                        Navigator.of(context)
+                            .popUntil(ModalRoute.withName("/login"));
                       },
                       child: const Text(
                         'Login',
