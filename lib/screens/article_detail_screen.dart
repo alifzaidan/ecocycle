@@ -1,7 +1,9 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ArticleDetailScreen extends StatelessWidget {
   const ArticleDetailScreen({super.key});
@@ -16,9 +18,9 @@ class ArticleDetailScreen extends StatelessWidget {
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
-              _headerProfile(context, article),
-              _textContainer(article),
-              _additionalContent(article),
+              _iconAndImage(context, article),
+              _headerArticle(article),
+              _content(context, article),
               const Spacer(),
               _bottomIcons(),
             ],
@@ -28,7 +30,7 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Container _headerProfile(BuildContext context, DataSnapshot article) {
+  Container _iconAndImage(BuildContext context, DataSnapshot article) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
       child: Column(
@@ -45,13 +47,18 @@ class ArticleDetailScreen extends StatelessWidget {
               ),
               const SizedBox(width: 48),
               IconButton(
-                onPressed: () {},
-                icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
+                onPressed: () {
+                  Share.share(
+                    article.child("url").value.toString(),
+                    subject: article.child("title").value.toString(),
+                  );
+                },
+                icon: const Icon(PhosphorIconsRegular.shareFat),
               ),
             ],
           ),
           CircleAvatar(
-            radius: 35,
+            radius: 42,
             foregroundImage:
                 NetworkImage(article.child("urlToImage").value.toString()),
           ),
@@ -60,15 +67,24 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _textContainer(DataSnapshot article) {
+  Widget _headerArticle(DataSnapshot article) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         children: [
           Text(
+            DateFormat('dd MMM yyyy').format(DateTime.parse(
+              article.child("publishedAt").value.toString(),
+            )),
+            style: GoogleFonts.dmSans(
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
             article.child("title").value.toString(),
             style: GoogleFonts.dmSans(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.w700,
             ),
             textAlign: TextAlign.center,
@@ -80,84 +96,63 @@ class ArticleDetailScreen extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           const Divider(),
         ],
       ),
     );
   }
 
-  Widget _additionalContent(DataSnapshot article) {
+  Container _content(BuildContext context, DataSnapshot article) {
+    List<String> formatArticle =
+        article.child("content").value.toString().split('   ');
     return Container(
+      height: MediaQuery.of(context).size.height * 0.50,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            article.child("content").value.toString(),
-            style: GoogleFonts.dmSans(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              height: 2,
-            ),
-            textAlign: TextAlign.justify,
-          ),
-        ],
+      child: Scrollbar(
+        child: ListView.builder(
+          itemCount: formatArticle.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                formatArticle[index],
+                style: GoogleFonts.dmSans(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  height: 2,
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
   Widget _bottomIcons() {
     return Container(
-      padding: const EdgeInsets.only(top: 20, bottom: 36),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       decoration: const BoxDecoration(
         color: Color(0xFFE9F5F1),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _buildIconWithText(
-            PhosphorIconsRegular.heart,
-            '12',
+          Text(
+            "Simpan Artikel",
+            style: TextStyle(
+              color: Colors.grey,
+            ),
           ),
-          _buildIconWithText(
-            PhosphorIconsRegular.chat,
-            '10',
-          ),
-          _buildIconWithText(
-            PhosphorIconsRegular.shareFat,
-            '2',
-          ),
-          _buildIconWithoutText(PhosphorIconsRegular.bookmarkSimple),
+          SizedBox(width: 10),
+          Icon(
+            PhosphorIconsRegular.bookmarkSimple,
+            color: Colors.grey,
+            size: 20,
+          )
         ],
       ),
-    );
-  }
-
-  Widget _buildIconWithText(IconData icon, String count) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          color: Colors.grey,
-          size: 20,
-        ),
-        const SizedBox(width: 5),
-        Text(
-          count,
-          style: const TextStyle(
-            color: Colors.grey,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildIconWithoutText(IconData icon) {
-    return Icon(
-      icon,
-      color: Colors.grey,
-      size: 20,
     );
   }
 }

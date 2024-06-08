@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ArticleScreen extends StatefulWidget {
   const ArticleScreen({super.key});
@@ -235,13 +236,20 @@ class _ArticleScreenState extends State<ArticleScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  const Row(
-                                    children: [
-                                      Icon(
-                                        PhosphorIconsRegular.shareFat,
-                                        color: Colors.grey,
-                                      ),
-                                    ],
+                                  IconButton(
+                                    onPressed: () {
+                                      Share.share(
+                                        snapshot.child("url").value.toString(),
+                                        subject: snapshot
+                                            .child("title")
+                                            .value
+                                            .toString(),
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      PhosphorIconsRegular.shareFat,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                   IconButton(
                                     onPressed: () async {
@@ -306,11 +314,11 @@ class _ArticleScreenState extends State<ArticleScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            snapshot.child("content").value.toString(),
+                            snapshot.child("description").value.toString(),
                             style: GoogleFonts.dmSans(
                               fontSize: 12,
                             ),
-                            maxLines: 3,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                           const Spacer(),
