@@ -1,8 +1,8 @@
-import 'package:ecocycle/models/article_model.dart';
 import 'package:ecocycle/models/bookmark_model.dart';
 import 'package:ecocycle/screens/article_detail_screen.dart';
-import 'package:ecocycle/services/api_services.dart';
 import 'package:ecocycle/services/bookmark_services.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +17,7 @@ class ArticleScreen extends StatefulWidget {
 }
 
 class _ArticleScreenState extends State<ArticleScreen> {
-  ApiArticle articles = ApiArticle();
+  final articlesFirebase = FirebaseDatabase.instance.ref("articles");
 
   @override
   Widget build(BuildContext context) {
@@ -155,264 +155,226 @@ class _ArticleScreenState extends State<ArticleScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-            padding:
-                const EdgeInsets.only(top: 20, bottom: 72, left: 20, right: 20),
-            child: FutureBuilder(
-              future: articles.getArticle(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Article>? article = snapshot.data;
-
-                  return SizedBox(
-                    height: 300 * article!.length.toDouble(),
-                    child: ListView.separated(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Stack(
-                          children: [
-                            Container(
-                              height: 270,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                borderRadius: BorderRadius.circular(25),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF99ABC6)
-                                        .withOpacity(0.2),
-                                    spreadRadius: 0,
-                                    blurRadius: 40,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
+        SizedBox(
+          height: 500,
+          child: FirebaseAnimatedList(
+            query: articlesFirebase,
+            itemBuilder: (context, snapshot, index, animation) {
+              return Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                height: 220,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 270,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(25),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF99ABC6).withOpacity(0.2),
+                            spreadRadius: 0,
+                            blurRadius: 40,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 25,
+                                foregroundImage: NetworkImage(
+                                  snapshot.child("urlToImage").value.toString(),
+                                ),
                               ),
-                              child: Column(
+                              const SizedBox(width: 10),
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Text(
+                                    snapshot.child("author").value.toString(),
+                                    style: GoogleFonts.dmSans(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      CircleAvatar(
-                                        radius: 25,
-                                        foregroundImage: NetworkImage(
-                                            article[index].urlToImage!),
+                                      Icon(
+                                        PhosphorIconsRegular.clock,
+                                        color: Colors.grey[400],
+                                        size: 17,
                                       ),
-                                      const SizedBox(width: 10),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            article[index].author!,
-                                            style: GoogleFonts.dmSans(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 5),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                PhosphorIconsRegular.clock,
-                                                color: Colors.grey[400],
-                                                size: 17,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                DateFormat('dd MMM yyyy')
-                                                    .format(DateTime.parse(
-                                                        article[index]
-                                                            .publishedAt!)),
-                                                style: GoogleFonts.dmSans(
-                                                  fontSize: 11,
-                                                  color: Colors.grey[400],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        DateFormat('dd MMM yyyy')
+                                            .format(DateTime.parse(
+                                          snapshot
+                                              .child("publishedAt")
+                                              .value
+                                              .toString(),
+                                        )),
+                                        style: GoogleFonts.dmSans(
+                                          fontSize: 11,
+                                          color: Colors.grey[400],
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 15),
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      padding: const EdgeInsets.all(0),
-                                    ),
-                                    onPressed: () {
-                                      pushScreen(
-                                        context,
-                                        settings: RouteSettings(
-                                            name: "/article-detail",
-                                            arguments: article[index]),
-                                        screen: const ArticleDetailScreen(),
-                                      );
-                                    },
-                                    child: Text(
-                                      article[index].title ?? "No Title",
-                                      style: GoogleFonts.dmSans(
-                                        fontWeight: FontWeight.w700,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        fontSize: 14,
+                                ],
+                              ),
+                              const Spacer(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  const Row(
+                                    children: [
+                                      Icon(
+                                        PhosphorIconsRegular.shareFat,
+                                        color: Colors.grey,
                                       ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    ],
                                   ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    article[index].content!,
-                                    style: GoogleFonts.dmSans(
-                                      fontSize: 12,
-                                    ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      pushScreen(
-                                        context,
-                                        settings: RouteSettings(
-                                            name: "/article-detail",
-                                            arguments: article[index]),
-                                        screen: const ArticleDetailScreen(),
+                                  IconButton(
+                                    onPressed: () async {
+                                      final newBookmark = Bookmark(
+                                        id: await DBBookmark().getLastId() + 1,
+                                        author: snapshot
+                                            .child("author")
+                                            .value
+                                            .toString(),
+                                        title: snapshot
+                                            .child("title")
+                                            .value
+                                            .toString(),
+                                        description: snapshot
+                                            .child("description")
+                                            .value
+                                            .toString(),
+                                        url: snapshot
+                                            .child("url")
+                                            .value
+                                            .toString(),
+                                        urlToImage: snapshot
+                                            .child("urlToImage")
+                                            .value
+                                            .toString(),
+                                        publishedAt: snapshot
+                                            .child("publishedAt")
+                                            .value
+                                            .toString(),
+                                        content: snapshot
+                                            .child("content")
+                                            .value
+                                            .toString(),
                                       );
+                                      await DBBookmark().insert(newBookmark);
+                                      // ignore: use_build_context_synchronously
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text('Bookmarked!'),
+                                        backgroundColor: Colors.green,
+                                      ));
                                     },
-                                    child: Text(
-                                      "See more",
-                                      style: GoogleFonts.dmSans(
-                                          fontSize: 12, color: Colors.amber),
+                                    icon: const Icon(
+                                      PhosphorIconsRegular.bookmarkSimple,
+                                      color: Colors.grey,
                                     ),
                                   ),
                                 ],
                               ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            snapshot.child("title").value.toString(),
+                            style: GoogleFonts.dmSans(
+                              fontWeight: FontWeight.w700,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 14,
                             ),
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 8),
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFE9F5F1),
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(25),
-                                    bottomRight: Radius.circular(25),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            snapshot.child("content").value.toString(),
+                            style: GoogleFonts.dmSans(
+                              fontSize: 12,
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const Spacer(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  pushScreen(
+                                    context,
+                                    settings: RouteSettings(
+                                        name: "/article-detail",
+                                        arguments: snapshot),
+                                    screen: const ArticleDetailScreen(),
+                                  );
+                                },
+                                child: Container(
+                                  width: 120,
+                                  margin: const EdgeInsets.only(right: 1),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffF2F2F4),
+                                    borderRadius: BorderRadius.circular(10),
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color(0xFFF9C951),
+                                        Color(0xFFFFEAB6),
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 10),
+                                  child: const Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        'Baca Artikel',
+                                        style: TextStyle(
+                                          color: Color(0xFF176B3F),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      Icon(
+                                        PhosphorIconsRegular.bookOpenText,
+                                        color: Color(0xFF176B3F),
+                                        size: 16,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          PhosphorIconsFill.heart,
-                                          color: Colors.red,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          '12',
-                                          style: GoogleFonts.dmSans(
-                                            fontSize: 12,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(width: 15),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          PhosphorIconsRegular.chat,
-                                          color: Colors.grey,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          '10',
-                                          style: GoogleFonts.dmSans(
-                                            fontSize: 12,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(width: 15),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          PhosphorIconsRegular.shareFat,
-                                          color: Colors.grey,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          '2',
-                                          style: GoogleFonts.dmSans(
-                                            fontSize: 12,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    IconButton(
-                                      onPressed: () async {
-                                        final newBookmark = Bookmark(
-                                          id: await DBBookmark().getLastId() +
-                                              1,
-                                          author: article[index].author,
-                                          title: article[index].title,
-                                          description:
-                                              article[index].description,
-                                          url: article[index].url,
-                                          urlToImage: article[index].urlToImage,
-                                          publishedAt:
-                                              article[index].publishedAt,
-                                          content: article[index].content,
-                                        );
-                                        await DBBookmark().insert(newBookmark);
-                                        // ignore: use_build_context_synchronously
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                          content: Text('Bookmarked!'),
-                                          backgroundColor: Colors.green,
-                                        ));
-                                      },
-                                      icon: const Icon(
-                                        PhosphorIconsRegular.bookmarkSimple,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: 20);
-                      },
-                      itemCount: article.length,
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text("Error: ${snapshot.error}"),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: Color(0xFF2BD07A),
-                    ),
-                  );
-                }
-              },
-            )),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }

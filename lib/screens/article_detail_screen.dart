@@ -1,4 +1,4 @@
-import 'package:ecocycle/models/article_model.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -8,7 +8,7 @@ class ArticleDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final article = ModalRoute.of(context)!.settings.arguments as Article;
+    final article = ModalRoute.of(context)!.settings.arguments as DataSnapshot;
 
     return Scaffold(
       body: SafeArea(
@@ -28,7 +28,7 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Container _headerProfile(BuildContext context, Article article) {
+  Container _headerProfile(BuildContext context, DataSnapshot article) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
       child: Column(
@@ -52,21 +52,21 @@ class ArticleDetailScreen extends StatelessWidget {
           ),
           CircleAvatar(
             radius: 35,
-            foregroundImage: NetworkImage(article.urlToImage ??
-                "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg"),
+            foregroundImage:
+                NetworkImage(article.child("urlToImage").value.toString()),
           ),
         ],
       ),
     );
   }
 
-  Widget _textContainer(Article article) {
+  Widget _textContainer(DataSnapshot article) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         children: [
           Text(
-            article.title ?? 'Title Not Found',
+            article.child("title").value.toString(),
             style: GoogleFonts.dmSans(
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -75,7 +75,7 @@ class ArticleDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            article.author ?? 'Author Not Found',
+            article.child("author").value.toString(),
             style: GoogleFonts.dmSans(
               fontSize: 14,
             ),
@@ -87,14 +87,14 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _additionalContent(Article article) {
+  Widget _additionalContent(DataSnapshot article) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            article.content ?? 'Content Not Found',
+            article.child("content").value.toString(),
             style: GoogleFonts.dmSans(
               fontSize: 12,
               fontWeight: FontWeight.w500,

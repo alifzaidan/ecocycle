@@ -7,7 +7,6 @@ class Article {
   String? publishedAt;
   String? content;
 
-  //Now let's create the constructor
   Article({
     required this.author,
     required this.title,
