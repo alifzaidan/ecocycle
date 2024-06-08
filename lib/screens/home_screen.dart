@@ -7,6 +7,7 @@ import 'package:ecocycle/services/user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 72, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -143,6 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
+                    useRootNavigator: true,
                     builder: (context) {
                       return Container(
                         decoration: BoxDecoration(
@@ -197,10 +199,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const ScanScreen(),
-                                  ));
-                                  // Navigator.pushNamed(context, '/scan');
+                                  pushScreen(
+                                    context,
+                                    settings:
+                                        const RouteSettings(name: "/scan"),
+                                    screen: const ScanScreen(),
+                                  );
                                 },
                                 child: const Text(
                                   'SCAN YOUR TRASH',
@@ -223,10 +227,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const UploadScreen(),
-                                  ));
-                                  // Navigator.pushNamed(context, '/upload');
+                                  pushScreen(
+                                    context,
+                                    settings:
+                                        const RouteSettings(name: "/upload"),
+                                    screen: const UploadScreen(),
+                                  );
                                 },
                                 child: const Text(
                                   'ADD MANUALLY',
@@ -299,11 +305,10 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisCellCount: 1.2,
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
+                  pushScreen(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const DropPointScreen(),
-                    ),
+                    settings: const RouteSettings(name: "/droppoint"),
+                    screen: const DropPointScreen(),
                   );
                 },
                 child: Container(
@@ -360,9 +365,12 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisCellCount: 1.2,
               child: InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const ArticleScreen();
-                  }));
+                  pushScreen(
+                    context,
+                    withNavBar: true,
+                    settings: const RouteSettings(name: "/article"),
+                    screen: const ArticleScreen(),
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(

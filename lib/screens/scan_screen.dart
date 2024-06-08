@@ -1,6 +1,7 @@
 import 'package:ecocycle/helper/local_notification_helper.dart';
 import 'package:ecocycle/screens/result_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ScanScreen extends StatefulWidget {
@@ -20,20 +21,18 @@ class _ScanScreenState extends State<ScanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height - 32,
-            padding: const EdgeInsets.symmetric(vertical: 72, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _backButton(context),
-                const SizedBox(height: 20),
-                _contentPage(),
-                const Spacer(),
-                _scanButton(),
-              ],
-            ),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _backButton(context),
+              const SizedBox(height: 20),
+              _contentPage(),
+              const Spacer(),
+              _scanButton(),
+            ],
           ),
         ),
       ),
@@ -88,8 +87,11 @@ class _ScanScreenState extends State<ScanScreen> {
             body: "Data berhasil didapatkan",
             payload: "scan_image",
           );
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ResultScreen()));
+          pushScreen(
+            context,
+            settings: const RouteSettings(name: "/result"),
+            screen: const ResultScreen(),
+          );
         },
         child: const Text(
           'SCAN IMAGE',

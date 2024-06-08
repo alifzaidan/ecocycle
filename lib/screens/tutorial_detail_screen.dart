@@ -12,8 +12,7 @@ class TutorialDetailScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            // height: MediaQuery.of(context).size.height - 32,
-            padding: const EdgeInsets.symmetric(vertical: 72, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -51,9 +50,9 @@ class TutorialDetailScreen extends StatelessWidget {
       child: Container(
         width: 100,
         height: 100,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.grey,
+          color: Colors.grey.shade300,
         ),
         alignment: Alignment.center,
         // child: Image.asset(

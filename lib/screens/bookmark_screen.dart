@@ -35,7 +35,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 72, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -328,6 +328,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Bookmark removed'),
+                              backgroundColor: Colors.red,
                             ),
                           );
                         },

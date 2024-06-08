@@ -20,8 +20,8 @@ class DropPointScreen extends StatelessWidget {
 
   Container _header(BuildContext context) {
     return Container(
-      height: 150,
-      padding: const EdgeInsets.only(top: 52, left: 24, right: 24),
+      height: 100,
+      padding: const EdgeInsets.only(left: 24),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xff28A77D), Color(0xff0D0140)],

@@ -29,8 +29,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Container _headerProfile(BuildContext context) {
     return Container(
-      height: 210,
-      padding: const EdgeInsets.only(top: 82, left: 24, right: 24),
+      height: 164,
+      padding: const EdgeInsets.only(top: 32, left: 24, right: 24),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xff28A77D), Color(0xff0D0140)],
@@ -181,9 +181,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             ),
                           ),
                           InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/');
-                            },
+                            onTap: () {},
                             child: Container(
                               width: 160,
                               padding: const EdgeInsets.symmetric(vertical: 8),

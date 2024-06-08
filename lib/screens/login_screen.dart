@@ -203,6 +203,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextButton(
                     onPressed: () {
                       _login();
+                      _emailController.clear();
+                      _passwordController.clear();
                     },
                     child: const Text(
                       'LOGIN',

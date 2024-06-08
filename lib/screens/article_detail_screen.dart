@@ -12,13 +12,15 @@ class ArticleDetailScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
               _headerProfile(context, article),
               _textContainer(article),
               _additionalContent(article),
-              // _bottomIcons()
+              const Spacer(),
+              _bottomIcons(),
             ],
           ),
         ),
@@ -28,8 +30,7 @@ class ArticleDetailScreen extends StatelessWidget {
 
   Container _headerProfile(BuildContext context, Article article) {
     return Container(
-      height: 180,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -61,7 +62,7 @@ class ArticleDetailScreen extends StatelessWidget {
 
   Widget _textContainer(Article article) {
     return Container(
-      padding: const EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         children: [
           Text(
@@ -72,13 +73,15 @@ class ArticleDetailScreen extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 6),
           Text(
             article.author ?? 'Author Not Found',
             style: GoogleFonts.dmSans(
               fontSize: 14,
             ),
           ),
+          const SizedBox(height: 12),
+          const Divider(),
         ],
       ),
     );
@@ -86,30 +89,10 @@ class ArticleDetailScreen extends StatelessWidget {
 
   Widget _additionalContent(Article article) {
     return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
-      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Container(
-          //   width: double.infinity,
-          //   height: 150,
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(25),
-          //     color: Colors.grey.withOpacity(0.5),
-          //   ),
-          //   child: Center(
-          //     child: Text(
-          //       'Foto Artikel',
-          //       style: GoogleFonts.dmSans(
-          //         fontSize: 18,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          const Divider(),
-          const SizedBox(height: 10),
           Text(
             article.content ?? 'Content Not Found',
             style: GoogleFonts.dmSans(

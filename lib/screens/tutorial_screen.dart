@@ -1,6 +1,7 @@
 import 'package:ecocycle/screens/tutorial_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class TutorialScreen extends StatelessWidget {
@@ -12,13 +13,12 @@ class TutorialScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
-        _article(context),
-        // const SizedBox(height: 20),
+        _listTutorial(context),
       ],
     );
   }
 
-  Column _article(BuildContext context) {
+  Column _listTutorial(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.width;
     double sizedBoxHeight = screenHeight - MediaQuery.of(context).padding.top;
     return Column(
@@ -31,10 +31,11 @@ class TutorialScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const TutorialDetailScreen(),
-                  ));
+                  pushScreen(
+                    context,
+                    settings: const RouteSettings(name: "/tutorial_detail"),
+                    screen: const TutorialDetailScreen(),
+                  );
                 },
                 child: Stack(
                   children: [
@@ -112,9 +113,9 @@ class TutorialScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _buildGreyButton("Dekorasi"),
-                              _buildGreyButton("Interior"),
-                              _buildGreyButton("Hiasan"),
+                              _buildCategoryTutorial("Dekorasi"),
+                              _buildCategoryTutorial("Interior"),
+                              _buildCategoryTutorial("Hiasan"),
                             ],
                           ),
                         ],
@@ -210,7 +211,7 @@ class TutorialScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildGreyButton(String text) {
+  Widget _buildCategoryTutorial(String text) {
     return SizedBox(
       width: 100,
       child: Container(

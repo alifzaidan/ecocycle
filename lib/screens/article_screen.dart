@@ -6,6 +6,7 @@ import 'package:ecocycle/services/bookmark_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ArticleScreen extends StatefulWidget {
@@ -39,8 +40,8 @@ class _ArticleScreenState extends State<ArticleScreen> {
 
   Container _headerProfile(BuildContext context) {
     return Container(
-      height: 210,
-      padding: const EdgeInsets.only(top: 82, left: 24, right: 24),
+      height: 164,
+      padding: const EdgeInsets.only(top: 32, left: 24, right: 24),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xff28A77D), Color(0xff0D0140)],
@@ -241,14 +242,12 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                       padding: const EdgeInsets.all(0),
                                     ),
                                     onPressed: () {
-                                      Navigator.push(
+                                      pushScreen(
                                         context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ArticleDetailScreen(),
-                                          settings: RouteSettings(
-                                              arguments: article[index]),
-                                        ),
+                                        settings: RouteSettings(
+                                            name: "/article-detail",
+                                            arguments: article[index]),
+                                        screen: const ArticleDetailScreen(),
                                       );
                                     },
                                     child: Text(
@@ -275,14 +274,12 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
+                                      pushScreen(
                                         context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ArticleDetailScreen(),
-                                          settings: RouteSettings(
-                                              arguments: article[index]),
-                                        ),
+                                        settings: RouteSettings(
+                                            name: "/article-detail",
+                                            arguments: article[index]),
+                                        screen: const ArticleDetailScreen(),
                                       );
                                     },
                                     child: Text(
@@ -382,6 +379,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
                                           content: Text('Bookmarked!'),
+                                          backgroundColor: Colors.green,
                                         ));
                                       },
                                       icon: const Icon(

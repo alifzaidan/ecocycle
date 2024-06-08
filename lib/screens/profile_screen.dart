@@ -4,6 +4,7 @@ import 'package:ecocycle/services/firebase_auth_services.dart';
 import 'package:ecocycle/services/user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -35,9 +36,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Container _headerProfile(BuildContext context) {
     return Container(
-      height: 320,
-      width: double.infinity,
-      padding: const EdgeInsets.only(top: 72, left: 24, right: 24),
+      height: 280,
+      padding: const EdgeInsets.only(top: 32, left: 24, right: 24),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xff28A77D), Color(0xff0D0140)],
@@ -67,10 +67,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.all(0),
                       alignment: Alignment.centerRight,
                       onPressed: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return const SettingsScreen();
-                        }));
+                        pushScreen(
+                          context,
+                          settings: const RouteSettings(name: "/settings"),
+                          screen: const SettingsScreen(),
+                        );
                       },
                       icon: const Icon(
                         PhosphorIconsRegular.gear,

@@ -4,6 +4,7 @@ import 'package:ecocycle/helper/local_notification_helper.dart';
 import 'package:ecocycle/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -37,20 +38,18 @@ class _UploadScreenState extends State<UploadScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height - 32,
-            padding: const EdgeInsets.symmetric(vertical: 72, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _backButton(context),
-                const SizedBox(height: 20),
-                _contentPage(),
-                const Spacer(),
-                _uploadButton(),
-              ],
-            ),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _backButton(context),
+              const SizedBox(height: 20),
+              _contentPage(),
+              const Spacer(),
+              _uploadButton(),
+            ],
           ),
         ),
       ),
@@ -190,8 +189,11 @@ class _UploadScreenState extends State<UploadScreen> {
             body: "Data berhasil didapatkan",
             payload: "scan_image",
           );
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ResultScreen()));
+          pushScreen(
+            context,
+            settings: const RouteSettings(name: "/result"),
+            screen: const ResultScreen(),
+          );
         },
         child: const Text(
           'UPLOAD IMAGE',

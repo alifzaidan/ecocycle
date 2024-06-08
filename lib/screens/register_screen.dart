@@ -262,6 +262,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       );
                       DbUser.addData(itemuser: userbaru);
                       _register();
+                      _emailController.clear();
+                      _passwordController.clear();
                     },
                     child: const Text(
                       'REGISTER',
