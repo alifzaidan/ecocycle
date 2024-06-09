@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecocycle/services/notif_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -83,90 +85,125 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Container _contentPage() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      child: Container(
-        height: 120,
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(25),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF99ABC6).withOpacity(0.2),
-              spreadRadius: 0,
-              blurRadius: 40,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CircleAvatar(
-              radius: 24,
-              foregroundImage: AssetImage('assets/images/logo_hijau.png'),
-            ),
-            const SizedBox(width: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Notifikasi Baru!',
-                  style: GoogleFonts.dmSans(
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 16,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Jangan lupa mendaur ulang sampah ya!',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 12,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const Spacer(),
-                Row(
-                  children: [
-                    Text(
-                      DateFormat('dd MMM yyyy')
-                          .format(DateTime.parse('2022-01-01T00:00:00Z')),
-                      style: GoogleFonts.dmSans(
-                        fontSize: 12,
-                        color: Colors.grey[400],
+      child: StreamBuilder<QuerySnapshot>(
+        stream: DbNotification.getData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                DocumentSnapshot notif = snapshot.data!.docs[index];
+
+                return Container(
+                  height: 172,
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF99ABC6).withOpacity(0.2),
+                        spreadRadius: 0,
+                        blurRadius: 40,
+                        offset: const Offset(0, 4),
                       ),
-                    ),
-                    // GestureDetector(
-                    //   onTap: () {},
-                    //   child: Container(
-                    //     width: 100,
-                    //     margin: const EdgeInsets.only(right: 1),
-                    //     decoration: BoxDecoration(
-                    //       color: const Color(0xffF2F2F4),
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //     padding: const EdgeInsets.symmetric(
-                    //         vertical: 8, horizontal: 10),
-                    //     child: const Text(
-                    //       'Delete',
-                    //       style: TextStyle(
-                    //         color: Colors.red,
-                    //         fontSize: 12,
-                    //       ),
-                    //       textAlign: TextAlign.center,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ],
-            )
-          ],
-        ),
+                    ],
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CircleAvatar(
+                        radius: 24,
+                        foregroundImage:
+                            AssetImage('assets/images/logo_hijau.png'),
+                      ),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        width: 260,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              notif.get('title'),
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w700,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 16,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              notif.get('body'),
+                              style: GoogleFonts.dmSans(
+                                fontSize: 12,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const Spacer(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  timeago
+                                      .format(notif.get('timestamp').toDate()),
+                                  style: GoogleFonts.dmSans(
+                                    fontSize: 12,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    DbNotification.deleteData(notif);
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    margin: const EdgeInsets.only(right: 1),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffF2F2F4),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 10),
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const SizedBox(
+                height: 24,
+              ),
+              itemCount: snapshot.data!.docs.length,
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text("Error: ${snapshot.error}"),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }

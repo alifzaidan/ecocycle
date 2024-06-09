@@ -54,6 +54,7 @@ dependencies:
     firebase_database: ^10.4.9
     share_plus: ^7.2.2
     url_launcher: ^6.3.0
+    timeago: ^3.6.1
 
 dev_dependencies:
     flutter_test:

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecocycle/main.dart';
 import 'package:ecocycle/screens/splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -92,6 +93,13 @@ class PushNotifications {
     required String body,
     required String payload,
   }) async {
+    final notificationsCollection =
+        FirebaseFirestore.instance.collection('notifications');
+    await notificationsCollection.add({
+      'title': title,
+      'body': body,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails('your channel id', 'your channel name',
             channelDescription: 'your channel description',
