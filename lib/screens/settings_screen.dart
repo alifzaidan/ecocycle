@@ -1,4 +1,5 @@
 import 'package:ecocycle/screens/login_screen.dart';
+import 'package:ecocycle/screens/update_password_screen.dart';
 import 'package:ecocycle/theme/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -162,33 +163,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF99ABC6).withOpacity(0.2),
-                spreadRadius: 0,
-                blurRadius: 32,
-                offset: const Offset(0, 4),
-              )
-            ],
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ListTile(
-            leading: const Icon(
-              PhosphorIconsRegular.lockKey,
+        InkWell(
+          onTap: () {
+            pushScreen(
+              context,
+              settings: const RouteSettings(name: "/profile-menu"),
+              screen: const UpdatePasswordScreen(),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF99ABC6).withOpacity(0.2),
+                  spreadRadius: 0,
+                  blurRadius: 32,
+                  offset: const Offset(0, 4),
+                )
+              ],
+              borderRadius: BorderRadius.circular(10),
             ),
-            title: Text(
-              'Forgot Password',
-              style: GoogleFonts.dmSans(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
+            child: ListTile(
+              leading: const Icon(
+                PhosphorIconsRegular.lockKey,
               ),
-            ),
-            trailing: const Icon(
-              PhosphorIconsRegular.caretRight,
+              title: Text(
+                'Forgot Password',
+                style: GoogleFonts.dmSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              trailing: const Icon(
+                PhosphorIconsRegular.caretRight,
+              ),
             ),
           ),
         ),

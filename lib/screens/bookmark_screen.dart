@@ -1,10 +1,12 @@
 import 'package:ecocycle/models/bookmark_model.dart';
-import 'package:ecocycle/screens/article_detail_screen.dart';
+import 'package:ecocycle/screens/bookmark_detail_screen.dart';
 import 'package:ecocycle/services/bookmark_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({super.key});
@@ -34,31 +36,67 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _backButton(context),
-                const SizedBox(height: 20),
-                _contentPage(),
-                // const SizedBox(height: 500),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _backButton(context),
+              _contentPage(),
+            ],
           ),
         ),
       ),
     );
   }
 
-  IconButton _backButton(BuildContext context) {
-    return IconButton(
-      padding: const EdgeInsets.all(0),
-      alignment: Alignment.centerLeft,
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      icon: const Icon(PhosphorIconsBold.arrowLeft),
+  Container _backButton(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xff28A77D), Color(0xff0D0140)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF99ABC6).withOpacity(0.2),
+            spreadRadius: 0,
+            blurRadius: 40,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          IconButton(
+            padding: const EdgeInsets.all(0),
+            alignment: Alignment.centerLeft,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              PhosphorIconsBold.arrowLeft,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            'Bookmark',
+            style: GoogleFonts.dmSans(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
     );
   }
 
@@ -66,14 +104,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Bookmark',
-          style: GoogleFonts.dmSans(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 32),
         FutureBuilder<List<Bookmark>>(
           future: futureBookmark,
           builder: (context, snapshot) {
@@ -101,12 +131,12 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               );
             } else {
               return SizedBox(
-                height: MediaQuery.of(context).size.height - 300,
+                height: MediaQuery.of(context).size.height - 220,
                 child: ListView(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   children: snapshot.data!.map((bookmark) {
-                    return _buildBookmarkCard(bookmark);
+                    return _articleBookmarked(context, bookmark);
                   }).toList(),
                 ),
               );
@@ -117,225 +147,167 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     );
   }
 
-  Widget _buildBookmarkCard(Bookmark bookmark) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ArticleDetailScreen(),
-              settings: RouteSettings(arguments: bookmark),
-            ),
-          );
-        },
-        child: Container(
-          width: double.infinity,
-          margin: const EdgeInsets.only(bottom: 20),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(25),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF99ABC6).withOpacity(0.2),
-                spreadRadius: 0,
-                blurRadius: 40,
-                offset: const Offset(0, 4),
+  Container _articleBookmarked(BuildContext context, Bookmark bookmark) {
+    return Container(
+      height: 220,
+      margin: const EdgeInsets.only(top: 20, left: 24, right: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(25),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF99ABC6).withOpacity(0.2),
+            spreadRadius: 0,
+            blurRadius: 40,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 25,
+                foregroundImage: NetworkImage(
+                  bookmark.urlToImage ?? '',
+                ),
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    bookmark.author ?? '',
+                    style: GoogleFonts.dmSans(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        PhosphorIconsRegular.clock,
+                        color: Colors.grey[400],
+                        size: 17,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        DateFormat('dd MMM yyyy').format(DateTime.parse(
+                          bookmark.publishedAt ?? '',
+                        )),
+                        style: GoogleFonts.dmSans(
+                          fontSize: 11,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Share.share(
+                        bookmark.url ?? '',
+                        subject: bookmark.title ?? '',
+                      );
+                    },
+                    icon: const Icon(
+                      PhosphorIconsRegular.shareFat,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      await DBBookmark().delete(bookmark.id);
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Bookmark removed'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      PhosphorIconsFill.bookmarkSimple,
+                      color: Colors.amber,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(height: 12),
+          Text(
+            bookmark.title ?? '',
+            style: GoogleFonts.dmSans(
+              fontWeight: FontWeight.w700,
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontSize: 14,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            bookmark.description ?? '',
+            style: GoogleFonts.dmSans(
+              fontSize: 12,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          foregroundImage:
-                              NetworkImage(bookmark.urlToImage ?? ''),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              bookmark.author ?? '',
-                              style: GoogleFonts.dmSans(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  PhosphorIconsRegular.clock,
-                                  color: Colors.grey[400],
-                                  size: 17,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  DateFormat('dd MMM yyyy').format(
-                                    DateTime.parse(bookmark.publishedAt ?? ''),
-                                  ),
-                                  style: GoogleFonts.dmSans(
-                                    fontSize: 11,
-                                    color: Colors.grey[400],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(0),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ArticleDetailScreen(),
-                            settings: RouteSettings(arguments: bookmark),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        bookmark.title ?? '',
-                        style: GoogleFonts.dmSans(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                          fontSize: 14,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      bookmark.content ?? '',
-                      style: GoogleFonts.dmSans(
-                        fontSize: 12,
-                        color: Colors.grey[400],
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 10),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ArticleDetailScreen(),
-                            settings: RouteSettings(arguments: bookmark),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "See more",
-                        style: GoogleFonts.dmSans(
-                          fontSize: 12,
-                          color: Colors.amber,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
+              GestureDetector(
+                onTap: () {
+                  pushScreen(
+                    context,
+                    settings: RouteSettings(
+                        name: "/bookmark-detail", arguments: bookmark),
+                    screen: const BookmarkDetailScreen(),
+                  );
+                },
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFE9F5F1),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25),
+                  width: 120,
+                  margin: const EdgeInsets.only(right: 1),
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF2F2F4),
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFFF9C951),
+                        Color(0xFFFFEAB6),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Row(
-                        children: [
-                          const Icon(
-                            PhosphorIconsFill.heart,
-                            color: Colors.red,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            '12',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 15),
-                      Row(
-                        children: [
-                          const Icon(
-                            PhosphorIconsRegular.chat,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            '10',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 15),
-                      Row(
-                        children: [
-                          const Icon(
-                            PhosphorIconsRegular.shareFat,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            '2',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () async {
-                          await DBBookmark().delete(bookmark.id);
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Bookmark removed'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          PhosphorIconsFill.bookmarkSimple,
-                          color: Colors.amber,
+                      Text(
+                        'Baca Artikel',
+                        style: TextStyle(
+                          color: Color(0xFF176B3F),
+                          fontSize: 12,
                         ),
+                      ),
+                      Icon(
+                        PhosphorIconsRegular.bookOpenText,
+                        color: Color(0xFF176B3F),
+                        size: 16,
                       ),
                     ],
                   ),
@@ -343,7 +315,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }

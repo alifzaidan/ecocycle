@@ -1,5 +1,4 @@
 import 'package:ecocycle/models/menu_profile_model.dart';
-import 'package:ecocycle/screens/settings_screen.dart';
 import 'package:ecocycle/services/firebase_auth_services.dart';
 import 'package:ecocycle/services/user_services.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +35,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Container _headerProfile(BuildContext context) {
     return Container(
-      height: 280,
-      padding: const EdgeInsets.only(top: 32, left: 24, right: 24),
+      height: 260,
+      padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xff28A77D), Color(0xff0D0140)],
@@ -52,7 +51,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: FutureBuilder(
         future: DbUser.getUserByEmail(_authService.getCurrentUser()!),
         builder: (context, snapshot) {
-          String jenisKelamin = snapshot.data![0]['jenisKelamin'];
+          String jenisKelamin =
+              snapshot.data![0]['jenisKelamin'] ?? 'Belum Memilih';
           String avatarUser;
 
           if (jenisKelamin == 'Laki-laki') {
@@ -66,31 +66,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (snapshot.hasData) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Icon(
-                      PhosphorIconsRegular.shareFat,
-                      color: Colors.white,
-                    ),
-                    IconButton(
-                      padding: const EdgeInsets.all(0),
-                      alignment: Alignment.centerRight,
-                      onPressed: () {
-                        pushScreen(
-                          context,
-                          settings: const RouteSettings(name: "/settings"),
-                          screen: const SettingsScreen(),
-                        );
-                      },
-                      icon: const Icon(
-                        PhosphorIconsRegular.gear,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(
                           width: 150,
                           child: Text(
-                            snapshot.data![0]['name'],
+                            snapshot.data![0]['name'] ?? 'Anda Belum Login',
                             style: GoogleFonts.dmSans(
                               color: Colors.white,
                               fontSize: 18,
@@ -251,9 +228,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         shrinkWrap: true,
         itemBuilder: (context, index) => InkWell(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return menuProfileList[index].page;
-            }));
+            pushScreen(
+              context,
+              settings: const RouteSettings(name: "/profile-menu"),
+              screen: menuProfileList[index].page,
+            );
           },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8),

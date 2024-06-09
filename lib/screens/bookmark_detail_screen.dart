@@ -1,18 +1,17 @@
 import 'package:ecocycle/models/bookmark_model.dart';
 import 'package:ecocycle/services/bookmark_services.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ArticleDetailScreen extends StatelessWidget {
-  const ArticleDetailScreen({super.key});
+class BookmarkDetailScreen extends StatelessWidget {
+  const BookmarkDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final article = ModalRoute.of(context)!.settings.arguments as DataSnapshot;
+    final article = ModalRoute.of(context)!.settings.arguments as Bookmark;
 
     return Scaffold(
       body: SafeArea(
@@ -32,7 +31,7 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Container _iconAndImage(BuildContext context, DataSnapshot article) {
+  Container _iconAndImage(BuildContext context, Bookmark article) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
       child: Column(
@@ -51,8 +50,8 @@ class ArticleDetailScreen extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   Share.share(
-                    article.child("url").value.toString(),
-                    subject: article.child("title").value.toString(),
+                    article.url.toString(),
+                    subject: article.title.toString(),
                   );
                 },
                 icon: const Icon(PhosphorIconsRegular.shareFat),
@@ -61,22 +60,23 @@ class ArticleDetailScreen extends StatelessWidget {
           ),
           CircleAvatar(
             radius: 42,
-            foregroundImage:
-                NetworkImage(article.child("urlToImage").value.toString()),
+            foregroundImage: NetworkImage(
+              article.urlToImage.toString(),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _headerArticle(DataSnapshot article) {
+  Widget _headerArticle(Bookmark article) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         children: [
           Text(
             DateFormat('dd MMM yyyy').format(DateTime.parse(
-              article.child("publishedAt").value.toString(),
+              article.publishedAt.toString(),
             )),
             style: GoogleFonts.dmSans(
               fontSize: 12,
@@ -84,7 +84,7 @@ class ArticleDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            article.child("title").value.toString(),
+            article.title.toString(),
             style: GoogleFonts.dmSans(
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -93,7 +93,7 @@ class ArticleDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            article.child("author").value.toString(),
+            article.author.toString(),
             style: GoogleFonts.dmSans(
               fontSize: 14,
             ),
@@ -105,9 +105,8 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Container _content(BuildContext context, DataSnapshot article) {
-    List<String> formatArticle =
-        article.child("content").value.toString().split('   ');
+  Container _content(BuildContext context, Bookmark article) {
+    List<String> formatArticle = article.content.toString().split('   ');
     return Container(
       height: MediaQuery.of(context).size.height * 0.48,
       padding: const EdgeInsets.only(top: 12, left: 32, right: 32),
@@ -132,7 +131,7 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _bottomIcons(BuildContext context, DataSnapshot article) {
+  Widget _bottomIcons(BuildContext context, Bookmark article) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       decoration: const BoxDecoration(
@@ -151,26 +150,18 @@ class ArticleDetailScreen extends StatelessWidget {
           IconButton(
             padding: const EdgeInsets.all(0),
             onPressed: () async {
-              final newBookmark = Bookmark(
-                id: await DBBookmark().getLastId() + 1,
-                author: article.child("author").value.toString(),
-                title: article.child("title").value.toString(),
-                description: article.child("description").value.toString(),
-                url: article.child("url").value.toString(),
-                urlToImage: article.child("urlToImage").value.toString(),
-                publishedAt: article.child("publishedAt").value.toString(),
-                content: article.child("content").value.toString(),
-              );
-              await DBBookmark().insert(newBookmark);
+              await DBBookmark().delete(article.id);
               // ignore: use_build_context_synchronously
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Bookmarked!'),
-                backgroundColor: Colors.green,
-              ));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Bookmark removed'),
+                  backgroundColor: Colors.red,
+                ),
+              );
             },
             icon: const Icon(
-              PhosphorIconsRegular.bookmarkSimple,
-              color: Colors.grey,
+              PhosphorIconsFill.bookmarkSimple,
+              color: Colors.amber,
             ),
           ),
         ],
