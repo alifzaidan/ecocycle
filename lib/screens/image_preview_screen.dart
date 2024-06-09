@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:ecocycle/helper/local_notification_helper.dart';
 import 'package:ecocycle/screens/result_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,34 +7,20 @@ import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UploadScreen extends StatefulWidget {
-  const UploadScreen({super.key});
+class ImagePreviewScreen extends StatefulWidget {
+  final XFile file;
+  const ImagePreviewScreen(this.file, {super.key});
 
   @override
-  State<UploadScreen> createState() => _UploadScreenState();
+  State<ImagePreviewScreen> createState() => _ImagePreviewScreenState();
 }
 
-class _UploadScreenState extends State<UploadScreen> {
+class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
   File? selectedImage;
-
-  Future getImage() async {
-    final ImagePicker picker = ImagePicker();
-    // Pick an image.
-    final XFile? imagePicked =
-        await picker.pickImage(source: ImageSource.gallery);
-    if (imagePicked != null) {
-      selectedImage = File(imagePicked.path);
-      setState(() {});
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    File picture = File(widget.file.path);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -46,7 +31,7 @@ class _UploadScreenState extends State<UploadScreen> {
             children: [
               _backButton(context),
               const SizedBox(height: 20),
-              _contentPage(),
+              _contentPage(picture),
               const Spacer(),
               _uploadButton(),
             ],
@@ -67,7 +52,7 @@ class _UploadScreenState extends State<UploadScreen> {
     );
   }
 
-  Column _contentPage() {
+  Column _contentPage(File picture) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -80,7 +65,7 @@ class _UploadScreenState extends State<UploadScreen> {
         ),
         const SizedBox(height: 12),
         Text(
-          'Add your garbage image to detect category',
+          'If the picture is not clear, take another picture',
           style: GoogleFonts.dmSans(
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -93,50 +78,17 @@ class _UploadScreenState extends State<UploadScreen> {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Theme.of(context).colorScheme.onPrimary),
           ),
-          child: Stack(
-            children: [
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    selectedImage != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: SizedBox(
-                              height: 468,
-                              width: MediaQuery.of(context).size.width,
-                              child:
-                                  Image.file(selectedImage!, fit: BoxFit.cover),
-                            ),
-                          )
-                        : Container(),
-                    if (selectedImage == null)
-                      TextButton(
-                        onPressed: () async {
-                          await getImage();
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              PhosphorIconsRegular.fileArrowUp,
-                              color: Colors.black,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              'Upload Garbage Picture',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Stack(
+              children: [
+                Center(
+                  child: Image.file(
+                    picture,
+                    height: 468,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              if (selectedImage != null)
                 Positioned(
                   bottom: 10,
                   left: 0,
@@ -144,21 +96,20 @@ class _UploadScreenState extends State<UploadScreen> {
                   child: Center(
                     child: TextButton(
                       onPressed: () {
-                        setState(() {
-                          selectedImage = null;
-                        });
+                        Navigator.pop(context);
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
                       ),
                       child: const Icon(
-                        Icons.delete,
+                        PhosphorIconsRegular.arrowBendUpLeft,
                         color: Colors.white,
                       ),
                     ),
                   ),
                 ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

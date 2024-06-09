@@ -55,6 +55,7 @@ dependencies:
     share_plus: ^7.2.2
     url_launcher: ^6.3.0
     timeago: ^3.6.1
+    camera: ^0.11.0+1
 
 dev_dependencies:
     flutter_test:
