@@ -21,7 +21,6 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Space for the back button
                   _contentPage(),
                 ],
               ),

@@ -51,19 +51,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: FutureBuilder(
         future: DbUser.getUserByEmail(_authService.getCurrentUser()!),
         builder: (context, snapshot) {
-          String jenisKelamin =
-              snapshot.data![0]['jenisKelamin'] ?? 'Belum Memilih';
-          String avatarUser;
-
-          if (jenisKelamin == 'Laki-laki') {
-            avatarUser = 'avatar_men';
-          } else if (jenisKelamin == 'Perempuan') {
-            avatarUser = 'avatar_women';
-          } else {
-            avatarUser = 'avatar_none';
-          }
-
           if (snapshot.hasData) {
+            String jenisKelamin =
+                snapshot.data![0]['jenisKelamin'] ?? 'Belum Memilih';
+            String avatarUser;
+
+            if (jenisKelamin == 'Laki-laki') {
+              avatarUser = 'avatar_men';
+            } else if (jenisKelamin == 'Perempuan') {
+              avatarUser = 'avatar_women';
+            } else {
+              avatarUser = 'avatar_none';
+            }
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,

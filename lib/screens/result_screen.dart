@@ -20,6 +20,8 @@ class ResultScreen extends StatefulWidget {
   State<ResultScreen> createState() => _ResultScreenState();
 }
 
+const nameTrash = 'Botol Plastik';
+
 class _ResultScreenState extends State<ResultScreen> {
   Result _selectedSegment = Result.description;
 
