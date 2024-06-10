@@ -3,6 +3,7 @@ import 'package:ecocycle/screens/droppoint_screen.dart';
 import 'package:ecocycle/screens/tutorial_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 enum Result { description, tutorial }
@@ -55,28 +56,19 @@ class _ResultScreenState extends State<ResultScreen> {
       padding: const EdgeInsets.all(0),
       alignment: Alignment.centerLeft,
       onPressed: () {
-        Navigator.pop(context);
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/navigation', (route) => false);
       },
       icon: const Icon(PhosphorIconsBold.arrowLeft),
     );
   }
 
   Widget _imageScan() {
-    return Center(
-      child: Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.grey.shade300,
-        ),
-        alignment: Alignment.center,
-        // child: Image.asset(
-        //   'assets/images/sampah_plastik.png',
-        //   width: 65,
-        //   height: 65,
-        //   color: Colors.white,
-        // ),
+    return const Center(
+      child: CircleAvatar(
+        backgroundImage: NetworkImage(
+            "https://firebasestorage.googleapis.com/v0/b/ecocycle-71a0b.appspot.com/o/images%2F2024-06-10%2010%3A53%3A42.004167.jpg?alt=media&token=2f875f14-a36b-4d96-b64e-966fd1c54a5c"),
+        radius: 60,
       ),
     );
   }
@@ -121,8 +113,11 @@ class _ResultScreenState extends State<ResultScreen> {
   Widget _linkDropPoint(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const DropPointScreen()));
+        pushScreen(
+          context,
+          settings: const RouteSettings(name: "/droppoint"),
+          screen: const DropPointScreen(),
+        );
       },
       child: Container(
         width: double.infinity,

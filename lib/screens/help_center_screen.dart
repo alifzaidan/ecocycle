@@ -21,7 +21,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 60), // Space for the back button
+                  // Space for the back button
                   _contentPage(),
                 ],
               ),
@@ -88,7 +88,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
 
   Container _contentPage() {
     return Container(
-      padding: const EdgeInsets.only(top: 120, left: 32, right: 32, bottom: 24),
+      padding: const EdgeInsets.only(top: 180, left: 32, right: 32, bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

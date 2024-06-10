@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecocycle/helper/local_notification_helper.dart';
 import 'package:ecocycle/screens/result_screen.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -17,6 +19,25 @@ class ImagePreviewScreen extends StatefulWidget {
 
 class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
   File? selectedImage;
+  String imageUrl = '';
+  bool isLoading = false;
+
+  Future<String> uploadImage(File imageFile) async {
+    Reference reference = FirebaseStorage.instance
+        .ref()
+        .child("images/${DateTime.now().toString()}.jpg");
+
+    TaskSnapshot snapshot = await reference.putFile(imageFile);
+
+    if (snapshot.state == TaskState.success) {
+      final String downloadUrl = await snapshot.ref.getDownloadURL();
+      print('Upload success, firebase url : $downloadUrl');
+      return downloadUrl;
+    } else {
+      print('Upload failed');
+      throw Exception('Upload failed');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +54,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
               const SizedBox(height: 20),
               _contentPage(picture),
               const Spacer(),
-              _uploadButton(),
+              _uploadButton(picture),
             ],
           ),
         ),
@@ -116,7 +137,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
     );
   }
 
-  Container _uploadButton() {
+  Container _uploadButton(File picture) {
     return Container(
       height: 62,
       width: double.infinity,
@@ -132,26 +153,50 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextButton(
-        onPressed: () {
+        onPressed: () async {
+          setState(() {
+            isLoading = true;
+          });
+          try {
+            String imageUrl = await uploadImage(picture);
+            final notificationsCollection =
+                FirebaseFirestore.instance.collection('history');
+            await notificationsCollection.add({
+              'name': "Botol Plastik",
+              'category': "Worthy Non-Organic",
+              'rangePrice': "Rp. 1000 - Rp. 2000 / kg",
+              'imageUrl': imageUrl,
+              'timestamp': FieldValue.serverTimestamp(),
+            });
+          } catch (e) {
+            // handle error
+          } finally {
+            setState(() {
+              isLoading = false;
+            });
+          }
           NotificationHelper.showNotification(
             title: "Berhasil Memindai Sampah",
             body: "Data berhasil didapatkan",
             payload: "scan_image",
           );
+          // ignore: use_build_context_synchronously
           pushScreen(
             context,
             settings: const RouteSettings(name: "/result"),
             screen: const ResultScreen(),
           );
         },
-        child: const Text(
-          'UPLOAD IMAGE',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        child: isLoading
+            ? const CircularProgressIndicator()
+            : const Text(
+                'UPLOAD IMAGE',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
       ),
     );
   }

@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecocycle/screens/result_screen.dart';
+import 'package:ecocycle/services/history_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -14,14 +19,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _headerProfile(context),
-              const SizedBox(height: 20),
-              _historyScan(context),
-            ],
-          ),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  _historyScan(),
+                ],
+              ),
+            ),
+            _headerProfile(context),
+          ],
         ),
       ),
     );
@@ -79,141 +87,171 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  Column _historyScan(BuildContext context) {
-    double totalHistory = 3;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: SizedBox(
-            height: 210 * totalHistory,
-            child: ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
+  Container _historyScan() {
+    return Container(
+      margin: const EdgeInsets.only(top: 180),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          StreamBuilder<QuerySnapshot>(
+            stream: DbHistory.getData(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
                 return Container(
-                  height: 186,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF99ABC6).withOpacity(0.2),
-                        spreadRadius: 0,
-                        blurRadius: 40,
-                        offset:
-                            const Offset(0, 4), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          const CircleAvatar(
-                              backgroundColor: Color(0xffF2F2F4)),
-                          const SizedBox(width: 10),
-                          Text(
-                            'Botol Plastik',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  height: 210 * snapshot.data!.docs.length.toDouble(),
+                  child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot history = snapshot.data!.docs[index];
+
+                      return Container(
+                        height: 196,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 20),
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF99ABC6).withOpacity(0.2),
+                              spreadRadius: 0,
+                              blurRadius: 40,
+                              offset: const Offset(0, 4),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: const Color(0xffF2F2F4),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Text(
-                                'Worthy Non-Organic',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(history['imageUrl']),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: const Color(0xffF2F2F4),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Text(
-                                'Rp. 5.000 - 8.000 / kg',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
+                                const SizedBox(width: 10),
+                                Text(
+                                  history['name'],
+                                  style: GoogleFonts.dmSans(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '25 minute ago',
-                            textAlign: TextAlign.end,
-                            style: GoogleFonts.dmSans(
-                              fontSize: 12,
-                              color: const Color(0xFFAAA6B9),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              width: 160,
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFD3ECE5),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Text(
-                                'See Detail',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffF2F2F4),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      history['category'],
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Container(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffF2F2F4),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      history['rangePrice'],
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      )
-                    ],
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  timeago.format(
+                                      history.get('timestamp').toDate()),
+                                  textAlign: TextAlign.end,
+                                  style: GoogleFonts.dmSans(
+                                    fontSize: 12,
+                                    color: const Color(0xFFAAA6B9),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    pushScreen(
+                                      context,
+                                      settings:
+                                          const RouteSettings(name: "/result"),
+                                      screen: const ResultScreen(),
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 160,
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFD3ECE5),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Text(
+                                      'See Detail',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: 20);
+                    },
+                    itemCount: snapshot.data!.docs.length,
                   ),
                 );
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 20);
-              },
-              itemCount: totalHistory.toInt(),
-            ),
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text("Error: ${snapshot.error}"),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
-        )
-      ],
+        ],
+      ),
     );
   }
 }

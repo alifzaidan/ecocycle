@@ -20,7 +20,7 @@ class _UploadScreenState extends State<UploadScreen> {
 
   Future getImage() async {
     final ImagePicker picker = ImagePicker();
-    // Pick an image.
+
     final XFile? imagePicked =
         await picker.pickImage(source: ImageSource.gallery);
     if (imagePicked != null) {
