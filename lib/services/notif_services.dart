@@ -6,7 +6,7 @@ CollectionReference notification =
 
 class DbNotification {
   static Stream<QuerySnapshot> getData() {
-    return notification.snapshots();
+    return notification.orderBy('timestamp', descending: true).snapshots();
   }
 
   static Future<void> addData(

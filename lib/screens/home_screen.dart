@@ -95,7 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
             } else if (snapshot.hasError) {
               return Text('Error retrieving user data: ${snapshot.error}');
             } else {
-              return const Text("Loading...");
+              return Text(
+                "Loading...",
+                style: GoogleFonts.dmSans(
+                  fontSize: 20,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              );
             }
           }),
     );
@@ -477,7 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SizedBox(
-                height: 210 * snapshot.data!.docs.length.toDouble(),
+                height: 850,
                 child: ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
@@ -614,7 +620,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   separatorBuilder: (context, index) {
                     return const SizedBox(height: 20);
                   },
-                  itemCount: snapshot.data!.docs.length,
+                  itemCount: snapshot.data!.docs.length > 4
+                      ? 4
+                      : snapshot.data!.docs.length,
                 ),
               );
             } else if (snapshot.hasError) {

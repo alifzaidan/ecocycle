@@ -5,7 +5,7 @@ CollectionReference history = FirebaseFirestore.instance.collection('history');
 
 class DbHistory {
   static Stream<QuerySnapshot> getData() {
-    return history.snapshots();
+    return history.orderBy('timestamp', descending: true).snapshots();
   }
 
   static Future<void> addData({required HistoryModel itemhistory}) async {

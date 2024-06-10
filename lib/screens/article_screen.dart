@@ -160,6 +160,11 @@ class _ArticleScreenState extends State<ArticleScreen> {
           height: 500,
           child: FirebaseAnimatedList(
             query: articlesFirebase,
+            defaultChild: const Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFF166A3E),
+              ),
+            ),
             itemBuilder: (context, snapshot, index, animation) {
               return Container(
                 margin:
