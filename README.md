@@ -46,6 +46,11 @@ Akses kamera pada aplikasi ini digunakan untuk memindai gambar sampah yang akan 
 Notifikasi yang kami gunakan ada dua jenis yaitu push notification dan local notification. Push notifikation akan dilakukan secara otomatis dari firabase messaging setiap jam 10 pagi untuk mengingatkan agar pengguna tetap mengelola sampahnya. Untuk local notification menggunakan package flutter_local_notification yang akan muncul ketika user selesai untuk mengunggah gambarnya ke database kami.
 <br><br><img src="assets/images/notification.png" width="250"/><br>
 
+## 6. Akses GPS / Maps
+
+Pada menu Nearby Drop Point akan ditampilkan peda untuk tempat pembuangan limbah terdekat dari pengguna. Untuk menampilkan peda pada aplikasi flutter menggunakan package flutter_map dan latlong2.
+<br><br><img src="assets/images/map.png" width="250"/><br>
+
 ## Paket yang Digunakan
 
 google_fonts: ^6.1.0 (https://pub.dev/packages/google_fonts)<br>
@@ -71,6 +76,8 @@ url_launcher: ^6.3.0 (https://pub.dev/packages/url_launcher)<br>
 timeago: ^3.6.1 (https://pub.dev/packages/timeago)<br>
 camera: ^0.11.0+1 (https://pub.dev/packages/camera)<br>
 firebase_storage: ^11.6.9 (https://pub.dev/packages/firebase_storage)<br>
+latlong2: ^0.9.1 (https://pub.dev/packages/latlong2)<br>
+flutter_map: ^6.1.0 (https://pub.dev/packages/flutter_map)<br>
 
 ## Getting Started
 

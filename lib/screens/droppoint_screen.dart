@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class DropPointScreen extends StatelessWidget {
@@ -11,7 +13,10 @@ class DropPointScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: [_header(context), _modalBottomSheet(context)],
+            children: [
+              _header(context),
+              _modalBottomSheet(context),
+            ],
           ),
         ),
       ),
@@ -94,45 +99,19 @@ class DropPointScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         clipBehavior: Clip.hardEdge,
-                        child: const Image(
-                          image: AssetImage('assets/images/maps.png'),
-                          fit: BoxFit.cover,
+                        child: FlutterMap(
+                          options: const MapOptions(
+                            initialCenter: LatLng(-7.9460899, 112.6040756),
+                            initialZoom: 9.2,
+                          ),
+                          children: [
+                            TileLayer(
+                              urlTemplate:
+                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              userAgentPackageName: 'com.example.app',
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Rumah Sampah',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          SizedBox(
-                            width: 200,
-                            child: Text(
-                              'Jl. Kendalsari, Tulusrejo, Kec. Lowokwaru, Kota Malang, Jawa Timur 65141',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          SizedBox(
-                            width: 200,
-                            child: Text(
-                              '+62 0812-3399-3978',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
@@ -169,13 +148,19 @@ class DropPointScreen extends StatelessWidget {
           },
         );
       },
-      child: Container(
-        height: MediaQuery.of(context).size.height - 200,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/maps.png"),
-            fit: BoxFit.cover,
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: FlutterMap(
+          options: const MapOptions(
+            initialCenter: LatLng(-7.9460899, 112.6040756),
+            initialZoom: 15.0,
           ),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.example.app',
+            ),
+          ],
         ),
       ),
     );
