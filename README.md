@@ -35,10 +35,20 @@ Dark Mode adalah fitur yang memungkinkan pengguna untuk mengubah tampilan antarm
 Stored local data dengan sqflite adalah mekanisme penyimpanan data lokal dalam pengembangan aplikasi Android menggunakan SQLite. Sqflite merupakan plugin Flutter yang memungkinkan pengembang untuk membuat, membaca, memperbarui, dan menghapus data dalam database SQLite secara efisien. Dengan menggunakan sqflite, pengembang dapat menyimpan data aplikasi seperti pengaturan pengguna, riwayat, atau informasi lainnya secara persisten di perangkat pengguna. Hal ini memungkinkan pengguna untuk mengakses dan mengelola data secara lokal dengan mudah, seperti menyimpan bookmark atau artikel berita dalam aplikasi.
 <br><br><img src="assets/images/bookmarks.png" width="250"/><br>
 
+## 4. Akses Kamera
+
+Akses kamera pada aplikasi ini digunakan untuk memindai gambar sampah yang akan diproses untuk diketahui jenis dari sampah tersebut, organik atau non-organik? masih layak atau tidak layak?. Kami menggunakan package camera untuk mengakses kamera dan image_picker untuk mengakses gallery untuk mengambil gambar dari perangkat.
+<br><br><img src="assets/images/scan_image.png" width="250"/><br>
+<br><br><img src="assets/images/upload_image.png" width="250"/><br>
+
+## 5. Push & Local Notification
+
+Notifikasi yang kami gunakan ada dua jenis yaitu push notification dan local notification. Push notifikation akan dilakukan secara otomatis dari firabase messaging setiap jam 10 pagi untuk mengingatkan agar pengguna tetap mengelola sampahnya. Untuk local notification menggunakan package flutter_local_notification yang akan muncul ketika user selesai untuk mengunggah gambarnya ke database kami.
+<br><br><img src="assets/images/notification.png" width="250"/><br>
+
 ## Paket yang Digunakan
 
 google_fonts: ^6.1.0 (https://pub.dev/packages/google_fonts)<br>
-persistent_bottom_nav_bar: ^5.0.2 (https://pub.dev/packages/persistent_bottom_nav_bar)<br>
 flutter_staggered_grid_view: ^0.7.0 (https://pub.dev/packages/flutter_staggered_grid_view)<br>
 phosphor_flutter: ^2.0.1 (https://pub.dev/packages/phosphor_flutter)<br>
 expandable: ^5.0.1 (https://pub.dev/packages/expandable)<br>
@@ -48,11 +58,19 @@ http: ^1.2.0 (https://pub.dev/packages/http)<br>
 intl: ^0.19.0 (https://pub.dev/packages/intl)<br>
 sqflite: ^2.3.2 (https://pub.dev/packages/sqflite)<br>
 path: ^1.8.3 (https://pub.dev/packages/path)<br>
-
-## Referensi
-
-Dokumentasi JSON API dan URL endpoint yang digunakan di program dapat diakses di:
-https://newsapi.org/
+firebase_auth: ^4.17.8 (https://pub.dev/packages/firebase_auth)<br>
+cloud_firestore: ^4.15.8 (https://pub.dev/packages/cloud_firestore)<br>
+rxdart: ^0.27.7 (https://pub.dev/packages/rxdart)<br>
+flutter_local_notifications: ^17.1.2 (https://pub.dev/packages/flutter_local_notifications)<br>
+firebase_messaging: ^14.7.19 (https://pub.dev/packages/firebase_messaging)<br>
+image_picker: ^1.0.8 (https://pub.dev/packages/image_picker)<br>
+persistent_bottom_nav_bar_v2: ^5.2.3 (https://pub.dev/packages/persistent_bottom_nav_bar_v2)<br>
+firebase_database: ^10.4.9 (https://pub.dev/packages/firebase_database)<br>
+share_plus: ^7.2.2 (https://pub.dev/packages/share_plus)<br>
+url_launcher: ^6.3.0 (https://pub.dev/packages/url_launcher)<br>
+timeago: ^3.6.1 (https://pub.dev/packages/timeago)<br>
+camera: ^0.11.0+1 (https://pub.dev/packages/camera)<br>
+firebase_storage: ^11.6.9 (https://pub.dev/packages/firebase_storage)<br>
 
 ## Getting Started
 
